@@ -7,30 +7,23 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "reviews")
-public class review {
-
+@Table(name = "menus")
+public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private Long menuId;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false, unique = true)
+    private String menuName;
 
     @Column(nullable = false)
-    private String content;
+    private int menuPrice;
 
     @Column(nullable = false)
-    private Long rate;
-
+    private String menuDescription;
 
 }

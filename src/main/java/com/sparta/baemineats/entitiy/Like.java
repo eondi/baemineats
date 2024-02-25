@@ -1,5 +1,6 @@
 package com.sparta.baemineats.entitiy;
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,16 +8,11 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "reviews")
-public class review {
-
+@Table(name = "likes")
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private Long likeId;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
@@ -27,10 +23,5 @@ public class review {
     private User user;
 
     @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private Long rate;
-
-
+    private Long count;
 }
