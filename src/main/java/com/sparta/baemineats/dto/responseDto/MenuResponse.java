@@ -1,2 +1,3 @@
-package com.sparta.baemineats.dto;public class MenuResponse {
+package com.sparta.baemineats.dto.responseDto;
+public class MenuResponse {
 }
