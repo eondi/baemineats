@@ -22,18 +22,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT '잘부탁드립니다.'")
-    private String description;
+    @Column(nullable = false)
+    private String description = "잘부탁드립니다.";
 
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    @Column(nullable = false)
+    private boolean active = true;
 
     public User(String username, String password, String address, String email,UserRoleEnum role) {
         this.username = username;
@@ -41,7 +44,6 @@ public class User {
         this.address = address;
         this.email = email;
         this.role = role;
-        this.description = "잘부탁드립니다.";
     }
 
     public User(String username, String password, String address, String email) {
@@ -60,5 +62,9 @@ public class User {
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void deActiveUser() {
+        this.active = false;
     }
 }

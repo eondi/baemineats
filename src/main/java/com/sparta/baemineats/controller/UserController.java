@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
 
     @PostMapping("/signup")
@@ -89,7 +89,7 @@ public class UserController {
                         .build());
     }
 
-    @GetMapping("/All")
+    @GetMapping("/admin/All")
     public ResponseEntity<ResponseForm> findAllUser() {
 
         log.info("회원정보 전체 검색");
@@ -101,6 +101,24 @@ public class UserController {
                         .data(AllUserList)
                         .build());
     }
+
+    @DeleteMapping("admin/{userId}")
+    public ResponseEntity<ResponseForm> deActiveUser(
+            @PathVariable Long userId){
+
+        log.info("회원정보 삭제(비활성화)");
+
+        userService.deActiveUser(userId);
+
+        return ResponseEntity.ok()
+                .body(ResponseForm.builder()
+                        .httpStatus(HttpStatus.OK.value())
+                        .message("회원정보 삭제(비활성화) 완료")
+                        .build());
+
+
+    }
+
 
 
     private ResponseEntity<ResponseForm> handleValidationResult(

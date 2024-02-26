@@ -50,12 +50,22 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
+    public List<ResponseUserList> findAllUser() {
+
+        return userRepository.findAll().stream()
+                .map(ResponseUserList::new)
+                .toList();
+    }
+
     @Transactional
     public void updateAll(User user, UserModifyAllRequestDto requestDto) {
 
         User findUser = findUserByUsername(user);
 
         findUser.userProfileAllUpdate(requestDto);
+
+        userRepository.save(findUser);
     }
 
     @Transactional
@@ -73,6 +83,17 @@ public class UserService {
 
         findUser.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
 
+        userRepository.save(findUser);
+
+    }
+
+    @Transactional
+    public void deActiveUser(Long userId){
+        User findUser = findUserByUserId(userId);
+
+        findUser.deActiveUser();
+
+        userRepository.save(findUser);
     }
 
     private User findUserByUsername(User user) {
@@ -81,10 +102,10 @@ public class UserService {
         );
     }
 
-    public List<ResponseUserList> findAllUser() {
-
-       return userRepository.findAll().stream()
-                .map(ResponseUserList::new)
-                .toList();
+    private User findUserByUserId(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new NoSuchElementException("유저가 존재하지 않습니다.")
+        );
     }
+
 }
