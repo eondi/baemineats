@@ -1,4 +1,4 @@
-package com.sparta.baemineats.entitiy;
+package com.sparta.baemineats.entity;
 
 public enum UserRoleEnum {
     USER(Authority.USER),
