@@ -1,4 +1,4 @@
-package com.sparta.baemineats.entitiy;
+package com.sparta.baemineats.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "reviews")
-public class review {
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
