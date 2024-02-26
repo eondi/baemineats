@@ -1,5 +1,6 @@
 package com.sparta.baemineats.service;
 
+import com.sparta.baemineats.dto.responseDto.ResponseUserList;
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyPasswordRequestDto;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -77,5 +79,12 @@ public class UserService {
         return userRepository.findByUsername(user.getUsername()).orElseThrow(
                 () -> new NoSuchElementException("유저가 존재하지 않습니다.")
         );
+    }
+
+    public List<ResponseUserList> findAllUser() {
+
+       return userRepository.findAll().stream()
+                .map(ResponseUserList::new)
+                .toList();
     }
 }

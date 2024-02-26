@@ -4,6 +4,7 @@ import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyPasswordRequestDto;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
+import com.sparta.baemineats.dto.responseDto.ResponseUserList;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.UserService;
 import jakarta.validation.Valid;
@@ -15,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -71,6 +74,8 @@ public class UserController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             BindingResult bindingResult
     ){
+        log.info("사용자 비밀번호변경");
+
         if(bindingResult.hasErrors()){
             return handleValidationResult(bindingResult);
         }
@@ -84,6 +89,18 @@ public class UserController {
                         .build());
     }
 
+    @GetMapping("/All")
+    public ResponseEntity<ResponseForm> findAllUser() {
+
+        log.info("회원정보 전체 검색");
+
+        List<ResponseUserList> AllUserList = userService.findAllUser();
+
+        return ResponseEntity.ok()
+                .body(ResponseForm.builder()
+                        .data(AllUserList)
+                        .build());
+    }
 
 
     private ResponseEntity<ResponseForm> handleValidationResult(

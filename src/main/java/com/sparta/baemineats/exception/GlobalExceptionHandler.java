@@ -24,4 +24,11 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                         e.getMessage()));
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionForm> NullPointerException(NullPointerException e){
+        return ResponseEntity.badRequest()
+                .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
+                        e.getMessage()));
+    }
 }
