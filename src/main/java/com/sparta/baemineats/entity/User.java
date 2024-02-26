@@ -57,4 +57,8 @@ public class User {
         this.description = requestDto.getDescription();
         this.address = requestDto.getAddress();
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

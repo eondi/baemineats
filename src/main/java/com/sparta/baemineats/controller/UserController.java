@@ -2,6 +2,7 @@ package com.sparta.baemineats.controller;
 
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
+import com.sparta.baemineats.dto.requestDto.UserModifyPasswordRequestDto;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.UserService;
@@ -23,6 +24,7 @@ public class UserController {
 
     private UserService userService;
 
+
     @PostMapping("/signup")
     public ResponseEntity<ResponseForm> createUser(
             @Valid @RequestBody SignupRequestDto requestDto,
@@ -42,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<ResponseForm> modifyUser(
+    public ResponseEntity<ResponseForm> modifyUserProfile(
             @Valid @RequestBody UserModifyAllRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             BindingResult bindingResult
@@ -61,6 +63,25 @@ public class UserController {
                         .message("회원정보 전체 수정 성공")
                         .build());
 
+    }
+
+    @PatchMapping("/profile/password")
+    public ResponseEntity<ResponseForm> modifyUserPassword(
+            @Valid @RequestBody UserModifyPasswordRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors()){
+            return handleValidationResult(bindingResult);
+        }
+
+        userService.updatePassword(userDetails.getUser(), requestDto);
+
+        return ResponseEntity.ok()
+                .body(ResponseForm.builder()
+                        .httpStatus(HttpStatus.OK.value())
+                        .message("비밀번호 변경 완료")
+                        .build());
     }
 
 

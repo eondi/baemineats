@@ -2,11 +2,13 @@ package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
+import com.sparta.baemineats.dto.requestDto.UserModifyPasswordRequestDto;
 import com.sparta.baemineats.entity.User;
 import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,12 +48,34 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void updateAll(User user, UserModifyAllRequestDto requestDto) {
 
-        User findUser = userRepository.findByUsername(user.getUsername()).orElseThrow(
-                () -> new NoSuchElementException("유저가 존재하지 않습니다.")
-        );
+        User findUser = findUserByUsername(user);
 
         findUser.userProfileAllUpdate(requestDto);
+    }
+
+    @Transactional
+    public void updatePassword(User user, UserModifyPasswordRequestDto requestDto) {
+
+        User findUser= findUserByUsername(user);
+
+        if(passwordEncoder.matches(requestDto.getNewPassword(), findUser.getPassword())){
+            throw new AccessDeniedException("비밀번호가 일치하지 않습니다.");
+        }
+
+        if(requestDto.getNewPassword().equals(requestDto.getPassword())){
+            throw new DataIntegrityViolationException("이전 비밀번호와 일치합니다.");
+        }
+
+        findUser.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+
+    }
+
+    private User findUserByUsername(User user) {
+        return userRepository.findByUsername(user.getUsername()).orElseThrow(
+                () -> new NoSuchElementException("유저가 존재하지 않습니다.")
+        );
     }
 }
