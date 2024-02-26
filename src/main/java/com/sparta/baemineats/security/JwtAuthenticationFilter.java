@@ -52,6 +52,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String jsonResponse = "{\"message\": \"로그인 성공\"}";
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResponse);
     }
 
@@ -61,6 +62,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String jsonResponse = "{\"message\": \"회원을 찾을 수 없습니다.\"}";
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResponse);
     }
 
