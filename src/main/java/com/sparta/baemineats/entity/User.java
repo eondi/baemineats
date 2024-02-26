@@ -2,11 +2,12 @@ package com.sparta.baemineats.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -15,7 +16,7 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -27,6 +28,18 @@ public class User {
     private String address;
 
     @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    public User(String username, String password, String profile, String address, String email,UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
+        this.profile = profile;
+        this.address = address;
+        this.email = email;
+        this.role = role;
+    }
 }
