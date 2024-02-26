@@ -1,6 +1,7 @@
 package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
+import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import com.sparta.baemineats.entity.User;
 import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -23,8 +25,7 @@ public class UserService {
     public void signup(SignupRequestDto requestDto) {
         String username= requestDto.getUserName();
         String password = passwordEncoder.encode(requestDto.getPassword());
-        String profile = requestDto.getProfile();
-        String address = requestDto.getAdderss();
+        String address = requestDto.getAddress();
         String email = requestDto.getEmail();
         UserRoleEnum role = requestDto.getUserRoleEnum();
 
@@ -41,7 +42,16 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(username, password, profile, address, email, role);
+        User user = new User(username, password, address, email, role);
         userRepository.save(user);
+    }
+
+    public void updateAll(User user, UserModifyAllRequestDto requestDto) {
+
+        User findUser = userRepository.findByUsername(user.getUsername()).orElseThrow(
+                () -> new NoSuchElementException("유저가 존재하지 않습니다.")
+        );
+
+        findUser.userProfileAllUpdate(requestDto);
     }
 }
