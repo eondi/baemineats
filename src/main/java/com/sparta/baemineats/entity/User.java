@@ -1,5 +1,6 @@
 package com.sparta.baemineats.entity;
 
+
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+
+
 @Table(name = "users")
 public class User {
 
@@ -17,16 +20,23 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
+
     private String username;
+
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
+
     private String description = "잘부탁드립니다.";
+
+    private String profile;
+
 
     @Column(nullable = false)
     private String address;
+
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -67,4 +77,5 @@ public class User {
     public void deActiveUser() {
         this.active = false;
     }
+
 }

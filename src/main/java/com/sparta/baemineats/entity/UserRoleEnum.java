@@ -2,7 +2,9 @@ package com.sparta.baemineats.entity;
 
 public enum UserRoleEnum {
     USER(Authority.USER),
+
     SELLER(Authority.SELLER),
+
     ADMIN(Authority.ADMIN);
 
     private final String authority;
@@ -19,6 +21,7 @@ public enum UserRoleEnum {
         public static final String USER = "ROLE_USER";
 
         public static final String SELLER = "ROLE_SELLER";
+
         public static final String ADMIN = "ROLE_ADMIN";
     }
 }
