@@ -24,4 +24,9 @@ public class Like {
 
     @Column(nullable = false)
     private Long count;
+
+    public Like(Store store, User user) {
+        this.store = store;
+        this.user = user;
+    }
 }
