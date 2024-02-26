@@ -66,7 +66,7 @@ public class StoreService {
         Store store = findStore(storeId);
 
         // 매장 유저 확인
-        if (!store.getUser().getUserName().equals(user.getUserName()))
+        if (!store.getUser().getUsername().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 판매자의 매장 수정은 불가능합니다.");
 
         // 매장 수정
@@ -98,7 +98,7 @@ public class StoreService {
         String storeName = store.getStoreName();
 
         // 매장 유저 확인
-        if (!store.getUser().getUserName().equals(user.getUserName()) && user.getRole().equals(UserRoleEnum.SELLER))
+        if (!store.getUser().getUsername().equals(user.getUsername()) && user.getRole().equals(UserRoleEnum.SELLER))
             throw new IllegalArgumentException("판매자의 경우 다른 판매자의 매장 수정은 불가능합니다.");
 
         // 매장 삭제
@@ -117,7 +117,7 @@ public class StoreService {
         String storeName = store.getStoreName();
 
         // 좋아요 확인
-        if (likeRepository.findByuserIdAndstoreID(user.getUserId(), store.getStoreId()).isPresent() ) {
+        if (likeRepository.findByUser_UserId(user.getUserId()).isPresent() && likeRepository.findByStore_StoreId(store.getStoreId()).isPresent()) {
             throw new IllegalArgumentException("좋아요는 중복이 불가합니다");
         }
         else{

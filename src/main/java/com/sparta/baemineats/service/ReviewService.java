@@ -55,7 +55,7 @@ public class ReviewService {
         Review review = findReview(reviewId);
 
         // 리뷰 유저 확인
-        if (!review.getUser().getUserName().equals(user.getUserName()))
+        if (!review.getUser().getUsername().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 사용자의 리뷰 수정은 불가능합니다.");
 
         // 리뷰 수정
@@ -82,11 +82,11 @@ public class ReviewService {
         String menuName = review.getMenu().getMenuName();
 
         // 리뷰 유저 확인 - 일반유저
-        if (!review.getUser().getUserName().equals(user.getUserName()) && user.getRole().equals(UserRoleEnum.USER))
+        if (!review.getUser().getUsername().equals(user.getUsername()) && user.getRole().equals(UserRoleEnum.USER))
             throw new IllegalArgumentException("다른 사용자의 리뷰 삭제는 불가능합니다.");
 
         // 리뷰 유저 확인 - 판매자
-        if (!review.getStore().getUser().getUserName().equals(user.getUserName()) && user.getRole().equals(UserRoleEnum.SELLER))
+        if (!review.getStore().getUser().getUsername().equals(user.getUsername()) && user.getRole().equals(UserRoleEnum.SELLER))
             throw new IllegalArgumentException("다른 매장의 리뷰 삭제는 불가능합니다.");
 
         // 리뷰 수정
