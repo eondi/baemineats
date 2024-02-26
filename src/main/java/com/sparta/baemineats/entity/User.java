@@ -31,8 +31,6 @@ public class User {
 
     private String description = "잘부탁드립니다.";
 
-    private String profile;
-
 
     @Column(nullable = false)
     private String address;
