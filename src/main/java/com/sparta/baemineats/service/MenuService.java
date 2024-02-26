@@ -38,6 +38,9 @@ public class MenuService {
         Menu menu = findMenu(menuId);
 
         menu.update(requestDto);
+
+        menuRepository.save(menu);
+
         return menuId;
     }
 
