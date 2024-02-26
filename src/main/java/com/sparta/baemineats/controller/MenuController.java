@@ -1,6 +1,6 @@
 package com.sparta.baemineats.controller;
 
-import com.sparta.baemineats.dto.MenuResponse;
+import com.sparta.baemineats.dto.responseDto.MenuResponse;
 import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
