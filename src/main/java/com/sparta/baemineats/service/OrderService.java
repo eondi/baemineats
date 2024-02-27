@@ -1,6 +1,5 @@
 package com.sparta.baemineats.service;
 
-import com.sparta.baemineats.dto.requestDto.OrderRequest;
 import com.sparta.baemineats.dto.responseDto.OrderResponse;
 import com.sparta.baemineats.entity.*;
 import com.sparta.baemineats.repository.*;
@@ -8,10 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -48,7 +45,7 @@ public class OrderService {
         if (cartList.isEmpty()) {
             throw new IllegalArgumentException("장바구니가 비어 있습니다.");
         }
-2
+
         List<Order> newOrders = new ArrayList<>();
         // 장바구니의 각 메뉴를 주문으로 변환
         for (Cart cart : cartList) {
@@ -72,10 +69,9 @@ public class OrderService {
 
 
     @Transactional
-    public List<OrderResponse> getAllOrders(){
-        return orderRepository.findAll().stream()
-                .map(order -> new OrderResponse())
-                .toList();
+    public List<OrderResponse> getOrders(){
+        return orderRepository.findAll().stream().map(OrderResponse::new).toList();
+
     }
 
 //    @Transactional

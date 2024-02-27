@@ -47,10 +47,10 @@ public ResponseEntity<ResponseForm> createOrderFromCart(
 }
 
     @GetMapping("")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return orders;
+    public List<OrderResponse> getOrders() {
+        return orderService.getOrders();
     }
+
 
 //    @PutMapping("/{orderId}")
 //    public ResponseEntity<ResponseForm> completeOrder(@PathVariable Long orderId) {
