@@ -31,10 +31,10 @@ public class StoreService {
         return new StoreResponse(store);
     }
 
-    public List<StroeResponse> getStoreNames(User user) {
+    public List<StoreResponse> getStoreNames(User user) {
         // 매장 전체 조회
         List<Store> storeList = storeRepository.findAll();
-        List<StoreResponse> stroeResponsesList = new ArrayList<>();
+        List<StoreResponse> storeResponsesList = new ArrayList<>();
 
         // 매장 이름 
         for (Store store : storeList) {

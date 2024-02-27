@@ -2,16 +2,12 @@ package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.ReviewRequest;
 import com.sparta.baemineats.dto.responseDto.ReviewResponse;
-import com.sparta.baemineats.dto.responseDto.StroeResponse;
 import com.sparta.baemineats.entity.*;
 import com.sparta.baemineats.repository.MenuRepository;
 import com.sparta.baemineats.repository.OrderRepository;
 import com.sparta.baemineats.repository.ReviewRepository;
-import com.sparta.baemineats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
