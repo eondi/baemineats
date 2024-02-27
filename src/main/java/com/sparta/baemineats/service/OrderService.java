@@ -1,5 +1,6 @@
 package com.sparta.baemineats.service;
 
+import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import com.sparta.baemineats.dto.responseDto.OrderResponse;
 import com.sparta.baemineats.entity.*;
 import com.sparta.baemineats.repository.*;

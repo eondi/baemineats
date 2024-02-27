@@ -1,6 +1,6 @@
 package com.sparta.baemineats.controller;
 
-import com.sparta.baemineats.dto.requestDto.OrderRequest;
+import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import com.sparta.baemineats.dto.responseDto.OrderResponse;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.entity.Order;
