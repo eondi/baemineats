@@ -64,6 +64,14 @@ public class User {
         this.role = UserRoleEnum.USER;
     }
 
+    public User(String username, String password, String address, String email,UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.email = email;
+        this.role = role;
+    }
+
     public void userProfileAllUpdate(UserModifyAllRequestDto requestDto) {
         this.email = requestDto.getEmail();
         this.description = requestDto.getDescription();
