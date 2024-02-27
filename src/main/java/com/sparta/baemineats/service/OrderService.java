@@ -3,18 +3,13 @@ package com.sparta.baemineats.service;
 import com.sparta.baemineats.dto.requestDto.OrderRequest;
 import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import com.sparta.baemineats.dto.responseDto.OrderResponse;
-import com.sparta.baemineats.entity.Menu;
-import com.sparta.baemineats.entity.Order;
-import com.sparta.baemineats.entity.Store;
-import com.sparta.baemineats.entity.User;
-import com.sparta.baemineats.repository.MenuRepository;
-import com.sparta.baemineats.repository.OrderRepository;
-import com.sparta.baemineats.repository.StoreRepository;
-import com.sparta.baemineats.repository.UserRepository;
+import com.sparta.baemineats.entity.*;
+import com.sparta.baemineats.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,24 +19,53 @@ public class OrderService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
+    private final CartRepository cartRepository;
 
+//    @Transactional
+//    public OrderResponse createOrder(OrderRequest request, User user){
+//
+//        userRepository.findById(request.getUserId()).orElseThrow(()
+//                -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+//
+//        Store store = storeRepository.findById(request.getStoreId()).orElseThrow(()
+//                -> new IllegalArgumentException("음식점이 존재하지 않습니다."));
+//
+//        Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(()
+//                -> new IllegalArgumentException("메뉴 존재하지 않습니다."));
+//
+//        Order order = orderRepository.save(new Order(user, store, menu));
+//
+//        return new OrderResponse(order);
+//    }
 
     @Transactional
-    public OrderResponse createOrder(OrderRequest request, User user){
+    public List<OrderResponse> createOrderFromCart(OrderRequest request, User user) {
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다."));
 
-        userRepository.findById(request.getUserId()).orElseThrow(()
-                -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+        if (cart.getMenus().isEmpty()) {
+            throw new IllegalArgumentException("장바구니가 비어 있습니다.");
+        }
 
-        Store store = storeRepository.findById(request.getStoreId()).orElseThrow(()
-                -> new IllegalArgumentException("음식점이 존재하지 않습니다."));
+        List<Order> newOrders = new ArrayList<>();
+        // 장바구니의 각 메뉴를 주문으로 변환
+        for (Menu menu : cart.getMenus()) {
+            Store store = menu.getStore(); // 메뉴에 대한 상점 정보가 필요하다고 가정
+            Order order = new Order(request, user, store, menu);
+            newOrders.add(order);
+        }
 
-        Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(()
-                -> new IllegalArgumentException("메뉴 존재하지 않습니다."));
+        orderRepository.saveAll(newOrders);
 
-        Order order = orderRepository.save(new Order(request, user, store, menu));
+        // 장바구니 비우기
+        cart.getMenus().clear();
+        cartRepository.save(cart);
 
-        return new OrderResponse(order);
+        // 새로 생성된 주문들의 정보 반환
+        return newOrders.stream()
+                .map(OrderResponse::new).toList();
     }
+
 
     @Transactional
     public List<OrderResponse> getOrders(){

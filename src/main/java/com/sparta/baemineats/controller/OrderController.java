@@ -22,11 +22,11 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("")
-    public ResponseEntity<ResponseForm> createOrder(
+    public ResponseEntity<ResponseForm> createOrderFromCart(
             @RequestBody OrderRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        orderService.createOrder(request, userDetails.getUser());
+        orderService.createOrderFromCart(request, userDetails.getUser());
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                     .httpStatus(HttpStatus.OK.value())

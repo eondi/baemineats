@@ -16,6 +16,10 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuId;
 
+//    @ManyToOne
+//    @JoinColumn(name = "cart_id")
+//    private Cart cart;
+
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -40,5 +44,8 @@ public class Menu {
         this.menuName = requestDto.getMenuName();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuDescription = requestDto.getMenuDescription();
+    }
+
+    public void clear() {
     }
 }
