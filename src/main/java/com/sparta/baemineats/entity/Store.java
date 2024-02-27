@@ -19,17 +19,17 @@ public class Store {
     @Column(nullable = false, unique = true)
     private String storeName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String storeDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private String sellrName;
 
-    public Store(StoreRequest request, User user) {
+
+    public Store(StoreRequest request, String username) {
         this.storeName = request.getStoreName();
         this.storeDescription = request.getStoreDescription();
-        this.user = user;
+        this.sellrName = username;
     }
 
     public void update(StoreRequest request) {
