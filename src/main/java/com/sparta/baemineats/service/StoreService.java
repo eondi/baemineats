@@ -1,7 +1,7 @@
 package com.sparta.baemineats.service;
 
-import com.sparta.baemineats.dto.requestDto.StroeRequest;
-import com.sparta.baemineats.dto.responseDto.StroeResponse;
+import com.sparta.baemineats.dto.requestDto.StoreRequest;
+import com.sparta.baemineats.dto.responseDto.StoreResponse;
 import com.sparta.baemineats.entity.Like;
 import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.entity.User;
@@ -20,7 +20,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final LikeRepository likeRepository;
 
-    public StroeResponse createStore(StroeRequest request, User user) {
+    public StoreResponse createStore(StoreRequest request, User user) {
         // 권한 판단
         if (user.getRole().equals(UserRoleEnum.USER) )
             throw new IllegalArgumentException("관리자, 판매자만 등록이 가능합니다.");
@@ -28,33 +28,33 @@ public class StoreService {
         // 매장 등록
         Store store = storeRepository.save(new Store(request, user));
 
-        return new StroeResponse(store);
+        return new StoreResponse(store);
     }
 
-    public List<StroeResponse> getStoreNames(User user) {
+    public List<StoreResponse> getStoreNames(User user) {
         // 매장 전체 조회
         List<Store> storeList = storeRepository.findAll();
-        List<StroeResponse> stroeResponsesList = new ArrayList<>();
+        List<StoreResponse> storeResponsesList = new ArrayList<>();
 
         // 매장 이름 
         for (Store store : storeList) {
-            stroeResponsesList.add(new StroeResponse(store.getStoreName()));
+            storeResponsesList.add(new StoreResponse(store.getStoreName()));
         }
 
-        return  stroeResponsesList;
+        return  storeResponsesList;
 
     }
 
 
-    public StroeResponse getStore(Long storeId, User user) {
+    public StoreResponse getStore(Long storeId, User user) {
 
         // 해당 매장 조회
         Store store = findStore(storeId);
-        return new StroeResponse(store);
+        return new StoreResponse(store);
 
     }
 
-    public StroeResponse updateStore(Long storeId, StroeRequest request, User user) {
+    public StoreResponse updateStore(Long storeId, StoreRequest request, User user) {
 
         // 권한 판단
         if (!user.getRole().equals(UserRoleEnum.SELLER) )
@@ -71,7 +71,7 @@ public class StoreService {
         // 매장 수정
         store.update(request);
 
-        return new StroeResponse(store);
+        return new StoreResponse(store);
 
     }
 
