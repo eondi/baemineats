@@ -1,5 +1,6 @@
 package com.sparta.baemineats.entity;
 
+import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,5 +53,9 @@ public class Order {
         this.createTime = LocalDateTime.now();
         // todo : 후에 기능추가
         this.orderState = "";
+    }
+
+    public void updateOrderState(OrderUpdate orderUpdate){
+        this.orderState = orderUpdate.getOrderState();
     }
 }
