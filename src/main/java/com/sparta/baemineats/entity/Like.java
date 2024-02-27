@@ -24,9 +24,6 @@ public class Like {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private Long count;
-
     public Like(Store store, User user) {
         this.store = store;
         this.user = user;
