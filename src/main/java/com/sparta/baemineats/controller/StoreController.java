@@ -41,7 +41,7 @@ public class StoreController {
     @GetMapping("/all")
     @Operation(summary = "음식점 목록 전체 조회", description = "음식점 전체 목록 조회를 한다")
     public ResponseEntity<ResponseForm> getStoreNames(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<StorResponse> response = storeService.getStoreNames(userDetails.getUser());
+        List<StoreResponse> response = storeService.getStoreNames(userDetails.getUser());
 
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()

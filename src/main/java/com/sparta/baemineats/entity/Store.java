@@ -1,6 +1,6 @@
 package com.sparta.baemineats.entity;
 
-import com.sparta.baemineats.dto.requestDto.StroeRequest;
+import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,13 +26,13 @@ public class Store {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Store(StroeRequest request, User user) {
+    public Store(StoreRequest request, User user) {
         this.storeName = request.getStoreName();
         this.storeDescription = request.getStoreDescription();
         this.user = user;
     }
 
-    public void update(StroeRequest request) {
+    public void update(StoreRequest request) {
         this.storeName = request.getStoreName();
         this.storeDescription = request.getStoreDescription();
     }
