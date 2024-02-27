@@ -45,7 +45,7 @@ public class MenuController {
 
     @PutMapping("/{menuId}")
     @Operation(summary = "메뉴 수정", description = "메뉴를 수정한다")
-    public ResponseEntity<ResponseForm> updateMenu(@PathVariable Long menuId, @RequestBody MenuRequest requestDto) {
+    public ResponseEntity<ResponseForm> updateMenu(@PathVariable Long menuId, @ModelAttribute MenuRequest requestDto) {
         menuService.updateMenu(menuId, requestDto);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()

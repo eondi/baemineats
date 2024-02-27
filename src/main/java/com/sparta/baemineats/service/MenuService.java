@@ -37,8 +37,9 @@ public class MenuService {
     @Transactional
     public void updateMenu(Long menuId, MenuRequest requestDto) {
         Menu menu = findMenu(menuId);
+        String imageUrl = uploadService.uploadImageAndGetUrl(requestDto.getImage());
 
-        menu.update(requestDto);
+        menu.update(requestDto, imageUrl);
         menuRepository.save(menu);
     }
 

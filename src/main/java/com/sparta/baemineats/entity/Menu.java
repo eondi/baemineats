@@ -40,9 +40,10 @@ public class Menu {
         this.imageUrl = imageUrl;
     }
 
-    public void update(MenuRequest requestDto) {
+    public void update(MenuRequest requestDto, String imageUrl) {
         this.menuName = requestDto.getMenuName();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuDescription = requestDto.getMenuDescription();
+        this.imageUrl = imageUrl;
     }
 }
