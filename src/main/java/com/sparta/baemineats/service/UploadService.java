@@ -31,6 +31,8 @@ public class UploadService {
                     .path(fileName)
                     .toUriString();
 
+//            String fileDownloadUri = "http://localhost:8080/uploads/" + fileName; //테스트 환경에서는 실제 HTTP 요청이 없기 때문에 테스트할 때 적용
+
             return fileDownloadUri;
         } catch (IOException ex) {
             throw new RuntimeException("파일 저장 중 오류 발생: " + ex.getMessage());
