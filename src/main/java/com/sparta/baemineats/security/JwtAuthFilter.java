@@ -1,12 +1,15 @@
 package com.sparta.baemineats.security;
 
 import com.sparta.baemineats.jwt.JwtUtil;
+import com.sparta.baemineats.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -17,15 +20,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Slf4j(topic = "JWT 검증 및 인가")
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
+@Slf4j(topic = "JWT 검증 및 로그인 인증 인가")
+public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+    private final TokenRepository tokenRepository;
+
+    public JwtAuthFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, TokenRepository tokenRepository) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.tokenRepository = tokenRepository;
     }
 
     @Override
@@ -34,18 +40,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String tokenValue = jwtUtil.getJwtFromHeader(req);
 
         if (StringUtils.hasText(tokenValue)) {
-
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
                 return;
             }
-
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-
-            try {
-                setAuthentication(info.getSubject());
-            } catch (Exception e) {
-                log.error(e.getMessage());
+            if(tokenRepository.existsByToken(tokenValue)) {
+                Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
+                try {
+                    setAuthentication(info.getSubject());
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                    ResponseEntity<String> responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                    sendErrorResponse(res, responseEntity);
+                    return;
+                }
+            }else {
+                log.error("사용자가 로그인 중이아닙니다");
+                ResponseEntity<String> responseEntity = new ResponseEntity<>("User not logged in", HttpStatus.UNAUTHORIZED);
+                sendErrorResponse(res, responseEntity);
                 return;
             }
         }
@@ -66,5 +78,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
+
+    private void sendErrorResponse(HttpServletResponse res, ResponseEntity<String> responseEntity) throws IOException {
+        res.setStatus(responseEntity.getStatusCodeValue());
+        res.getWriter().write(responseEntity.getBody());
+        res.getWriter().flush();
+        res.getWriter().close();
     }
 }
