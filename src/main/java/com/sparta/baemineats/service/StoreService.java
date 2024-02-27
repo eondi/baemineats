@@ -1,7 +1,6 @@
 package com.sparta.baemineats.service;
 
-import com.sparta.baemineats.controller.MenuController;
-import com.sparta.baemineats.dto.requestDto.StroeRequset;
+import com.sparta.baemineats.dto.requestDto.StroeRequest;
 import com.sparta.baemineats.dto.responseDto.StroeResponse;
 import com.sparta.baemineats.entity.Like;
 import com.sparta.baemineats.entity.Store;
@@ -21,7 +20,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final LikeRepository likeRepository;
 
-    public StroeResponse createStore(StroeRequset request, User user) {
+    public StroeResponse createStore(StroeRequest request, User user) {
         // 권한 판단
         if (user.getRole().equals(UserRoleEnum.USER) )
             throw new IllegalArgumentException("관리자, 판매자만 등록이 가능합니다.");
@@ -55,7 +54,7 @@ public class StoreService {
 
     }
 
-    public StroeResponse updateStore(Long storeId, StroeRequset request, User user) {
+    public StroeResponse updateStore(Long storeId, StroeRequest request, User user) {
 
         // 권한 판단
         if (!user.getRole().equals(UserRoleEnum.SELLER) )
