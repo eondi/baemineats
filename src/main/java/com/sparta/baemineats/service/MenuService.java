@@ -16,12 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuService {
     private final MenuRepository menuRepository;
+    private final UploadService uploadService;
     private final StoreRepository storeRepository;
 
     @Transactional
     public void createMenu(Long storeId, MenuRequest requestDto) {
+        String imageUrl = uploadService.uploadImageAndGetUrl(requestDto.getImage());
         Store store = findStoreId(storeId);
-        menuRepository.save(new Menu(requestDto, store));
+        menuRepository.save(new Menu(requestDto, store, imageUrl));
     }
 
     public List<MenuResponse> getMenus() {

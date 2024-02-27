@@ -22,7 +22,7 @@ public class MenuController {
 
     @PostMapping("/stores/{storeId}")
     @Operation(summary = "메뉴 등록", description = "메뉴를 등록한다")
-    public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @RequestBody MenuRequest requestDto) {
+    public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @ModelAttribute MenuRequest requestDto) {
         menuService.createMenu(storeId, requestDto);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
