@@ -1,5 +1,6 @@
 package com.sparta.baemineats.controller;
 
+import com.sparta.baemineats.dto.requestDto.LoginRequestDto;
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyPasswordRequestDto;
@@ -7,11 +8,14 @@ import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.dto.responseDto.ResponseUserList;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -46,7 +50,35 @@ public class UserController {
                             .build());
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<ResponseForm> login(
+            @RequestBody LoginRequestDto requestDto,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws Exception {
+        userService.login(requestDto, httpServletResponse);
+
+        return ResponseEntity.ok()
+                .body(ResponseForm.builder()
+                        .httpStatus(HttpStatus.OK.value())
+                        .message("로그인 성공")
+                        .build());
+    }
+
+    @PostMapping("/logout")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN')")
+    public ResponseEntity<ResponseForm> logout(
+            HttpServletRequest request
+    ){
+        userService.logout(request);
+        return ResponseEntity.ok()
+                .body(ResponseForm.builder()
+                        .httpStatus(HttpStatus.OK.value())
+                        .message("로그아웃 완료")
+                        .build());
+    }
+
     @PutMapping("/profile")
+    @PreAuthorize("hasAnyRole('USER','SELLER', 'ADMIN')")
     public ResponseEntity<ResponseForm> modifyUserProfile(
             @Valid @RequestBody UserModifyAllRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -69,6 +101,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile/password")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<ResponseForm> modifyUserPassword(
             @Valid @RequestBody UserModifyPasswordRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -89,7 +122,8 @@ public class UserController {
                         .build());
     }
 
-    @GetMapping("/admin/All")
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseForm> findAllUser() {
 
         log.info("회원정보 전체 검색");
@@ -103,6 +137,7 @@ public class UserController {
     }
 
     @DeleteMapping("admin/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseForm> deActiveUser(
             @PathVariable Long userId){
 
