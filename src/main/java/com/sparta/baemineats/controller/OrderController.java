@@ -65,23 +65,22 @@ public ResponseEntity<ResponseForm> createOrderFromCart(
     @PutMapping("/state/{orderId}")
     public ResponseEntity<ResponseForm> updateOrderState(
             @PathVariable Long orderId,
-            @RequestBody String newState,
+            @RequestBody OrderUpdate orderUpdate,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        orderService.updateOrderState(orderId, newState, userDetails.getUser());
+        orderService.updateOrderState(orderId, orderUpdate, userDetails.getUser());
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                         .httpStatus(HttpStatus.OK.value())
                         .message("주문 상태 변경")
                         .build());
-
     }
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<ResponseForm> cancelOrder(
+    public ResponseEntity<ResponseForm> deleteOrder(
             @PathVariable Long orderId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        orderService.cancelOrder(orderId, userDetails.getUser());
+        orderService.deleteOrder(orderId, userDetails.getUser());
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                         .httpStatus(HttpStatus.OK.value())

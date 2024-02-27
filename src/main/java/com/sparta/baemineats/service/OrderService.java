@@ -85,18 +85,18 @@ public class OrderService {
 //    }
 
     @Transactional
-    public void updateOrderState(Long orderId, String newState, User user){
+    public void updateOrderState(Long orderId, OrderUpdate orderUpdate, User user){
         Order order = orderRepository.findById(orderId).orElseThrow(()
                 -> new IllegalArgumentException("주문이 존재하지 않습니다."));
         if (!order.getUser().equals(user)) {
-            throw new IllegalArgumentException("수정할 수 있습니다.");
+            throw new IllegalArgumentException("주문자만 주문 상태를 변경할 수 있습니다.");
         }
-        order.setOrderState(newState);
+        order.updateOrderState(orderUpdate);
         orderRepository.save(order);
     }
 
     @Transactional
-    public void cancelOrder(Long orderId, User user){
+    public void deleteOrder(Long orderId, User user){
         Order order = findOne(orderId);
 
         if (!order.getUser().equals(user)) {
