@@ -4,7 +4,7 @@ import com.sparta.baemineats.entity.Store;
 
 import java.time.LocalDateTime;
 
-public class StroeResponse {
+public class StoreResponse {
     private Long storeId;
     private String storeName;
     private String storeDescription;
