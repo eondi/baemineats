@@ -1,10 +1,12 @@
 package com.sparta.baemineats.jwt;
 
+import com.sparta.baemineats.dto.responseDto.TokenDto;
 import com.sparta.baemineats.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,14 +20,16 @@ import java.util.Date;
 @Slf4j(topic = "JwtUtil")
 @Component
 public class JwtUtil {
+    public static final String BEARER_TYPE = "Bearer";
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
+
     // 토큰 만료시간
-    private final long TOKEN_TIME = 60 * 60 * 1000L; // 1 hour
+    private final long TOKEN_TIME = 60 * 60 * 1000L;
 
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
@@ -39,17 +43,24 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
+    public TokenDto createToken(String username, UserRoleEnum role) {
         Date date = new Date();
 
-        return BEARER_PREFIX +
+        String accessToken =
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
                         .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
+                        .setExpiration(new Date(date.getTime()+ TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .authorizationType(AUTHORIZATION_HEADER)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(date.getTime()+ TOKEN_TIME)
+                .build();
     }
 
     // header 에서 JWT 가져오기
@@ -60,6 +71,7 @@ public class JwtUtil {
         }
         return null;
     }
+
 
     // 토큰 검증
     public boolean validateToken(String token) {
@@ -78,9 +90,15 @@ public class JwtUtil {
         return false;
     }
 
+    public void accessTokenSetHeader(String accessToken, HttpServletResponse response) {
+        String headerValue = BEARER_PREFIX + accessToken;
+        response.setHeader(AUTHORIZATION_HEADER, headerValue);
+    }
+
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
 
 }

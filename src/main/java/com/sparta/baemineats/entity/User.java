@@ -1,8 +1,10 @@
 package com.sparta.baemineats.entity;
 
 
+import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -44,12 +47,13 @@ public class User {
     @Column(nullable = false)
     private boolean active = true;
 
-    public User(String username, String password, String address, String email,UserRoleEnum role) {
-        this.username = username;
-        this.password = password;
-        this.address = address;
-        this.email = email;
-        this.role = role;
+
+    public User(SignupRequestDto requestDto, String encodedPassword) {
+        this.username = requestDto.getUserName();
+        this.password = encodedPassword;
+        this.address = requestDto.getAddress();
+        this.email = requestDto.getEmail();
+        this.role = requestDto.getUserRoleEnum();
     }
 
     public User(String username, String password, String address, String email) {
@@ -75,3 +79,4 @@ public class User {
     }
 
 }
+
