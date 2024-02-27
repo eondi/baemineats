@@ -1,6 +1,6 @@
 package com.sparta.baemineats.controller;
 
-import com.sparta.baemineats.dto.requestDto.StroeRequest;
+import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.dto.responseDto.StoreResponse;
 import com.sparta.baemineats.security.UserDetailsImpl;
@@ -27,7 +27,7 @@ public class StoreController {
     @PostMapping
     @Operation(summary = "음식점 등록", description = "음식점을 등록한다")
     // 관리자로 등록시에 user의id가 관리자의 id가 되는 부분
-    public ResponseEntity<ResponseForm> createStore(@RequestBody StroeRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseForm> createStore(@RequestBody StoreRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StoreResponse response = storeService.createStore(request, userDetails.getUser());
 
         return ResponseEntity.ok()
@@ -66,7 +66,7 @@ public class StoreController {
 
     @PutMapping("{storeId}")
     @Operation(summary = "음식점 수정", description = "특정 음식점을 수정 한다")
-    public ResponseEntity<ResponseForm> updateStore(@PathVariable Long storeId, @RequestBody StroeRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseForm> updateStore(@PathVariable Long storeId, @RequestBody StoreRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StoreResponse response = storeService.updateStore(storeId, request, userDetails.getUser());
 
         return ResponseEntity.ok()
