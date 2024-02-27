@@ -3,6 +3,7 @@ package com.sparta.baemineats.controller;
 import com.sparta.baemineats.dto.requestDto.OrderRequest;
 import com.sparta.baemineats.dto.responseDto.OrderResponse;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
+import com.sparta.baemineats.entity.Order;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class OrderController {
             @RequestBody OrderRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        OrderResponse orderResponse = orderService.createOrder(request, userDetails.getUser());
+        orderService.createOrder(request, userDetails.getUser());
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                     .httpStatus(HttpStatus.OK.value())
@@ -47,13 +48,8 @@ public class OrderController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseForm> getOrders() {
-        List<OrderResponse> orderResponses = orderService.getOrders();
-        return ResponseEntity.ok()
-                .body(ResponseForm.builder()
-                        .httpStatus(HttpStatus.OK.value())
-                        .message("주문 조회")
-                        .build());
+    public List<OrderResponse> getOrders() {
+        return orderService.getOrders();
     }
 
     @PutMapping("/{orderId}")

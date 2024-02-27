@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -39,16 +38,15 @@ public class OrderService {
         Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(()
                 -> new IllegalArgumentException("메뉴 존재하지 않습니다."));
 
-        orderRepository.save(new Order(request, user, store, menu));
-        //
-        return new OrderResponse();
+        Order order = orderRepository.save(new Order(request, user, store, menu));
+
+        return new OrderResponse(order);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<OrderResponse> getOrders(){
-        return orderRepository.findAll().stream()
-                .map(order -> new OrderResponse())
-                .collect(Collectors.toList());
+        return orderRepository.findAll().stream().map(OrderResponse::new).toList();
+              
     }
 
     @Transactional
