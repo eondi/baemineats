@@ -2,7 +2,6 @@ package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import com.sparta.baemineats.dto.responseDto.StoreResponse;
-import com.sparta.baemineats.entity.Like;
 import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.entity.User;
 import com.sparta.baemineats.entity.UserRoleEnum;
@@ -106,25 +105,5 @@ public class StoreService {
         storeRepository.delete(store);
 
         return storeName;
-    }
-
-    public String likeStore(Long storeId, User user) {
-        // 권한 판단
-        if (!user.getRole().equals(UserRoleEnum.SELLER) )
-            throw new IllegalArgumentException("일반 사용자만 좋아요가 가능합니다");
-
-        // 해당 매장 조회
-        Store store = findStore(storeId);
-        String storeName = store.getStoreName();
-
-        // 좋아요 확인
-        if (likeRepository.findByUser_UserId(user.getUserId()).isPresent() && likeRepository.findByStore_StoreId(store.getStoreId()).isPresent()) {
-            throw new IllegalArgumentException("좋아요는 중복이 불가합니다");
-        }
-        else{
-            Like like = likeRepository.save(new Like(store, user));
-        }
-
-        return  storeName;
     }
 }
