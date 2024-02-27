@@ -4,9 +4,12 @@ import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import com.sparta.baemineats.dto.responseDto.MenuResponse;
 import com.sparta.baemineats.entity.Menu;
 import com.sparta.baemineats.entity.Store;
+import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.MenuRepository;
 import com.sparta.baemineats.repository.StoreRepository;
+import com.sparta.baemineats.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,22 +23,30 @@ public class MenuService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public void createMenu(Long storeId, MenuRequest requestDto) {
+    public void createMenu(Long storeId, MenuRequest requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        if (!userDetails.getUser().getRole().equals(UserRoleEnum.SELLER) )
+            throw new IllegalArgumentException("판매자만 메뉴 등록이 가능합니다.");
+
         String imageUrl = uploadService.uploadImageAndGetUrl(requestDto.getImage());
         Store store = findStoreId(storeId);
         menuRepository.save(new Menu(requestDto, store, imageUrl));
     }
 
     public List<MenuResponse> getMenus() {
-        return menuRepository.findAll().stream().map(MenuResponse::new).toList();
+        return menuRepository.findAll().stream().map(menu -> new MenuResponse(menu, menu.getImageUrl())).toList();
     }
 
     public List<MenuResponse> getMenuFindById(Long menuId) {
-        return menuRepository.findMenuByMenuId(menuId).stream().map(MenuResponse::new).toList();
+        return menuRepository.findMenuByMenuId(menuId).stream().map(menu -> new MenuResponse(menu, menu.getImageUrl())).toList();
     }
 
     @Transactional
-    public void updateMenu(Long menuId, MenuRequest requestDto) {
+    public void updateMenu(Long menuId, MenuRequest requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        if (!userDetails.getUser().getRole().equals(UserRoleEnum.SELLER) )
+            throw new IllegalArgumentException("판매자만 메뉴 수정이 가능합니다");
+
         Menu menu = findMenu(menuId);
         String imageUrl = uploadService.uploadImageAndGetUrl(requestDto.getImage());
 
@@ -44,7 +55,11 @@ public class MenuService {
     }
 
     @Transactional
-    public void deleteMenu(Long menuId) {
+    public void deleteMenu(Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        if (!userDetails.getUser().getRole().equals(UserRoleEnum.SELLER) )
+            throw new IllegalArgumentException("판매자만 메뉴 삭제가 가능합니다");
+
         Menu menu = findMenu(menuId);
 
         menuRepository.delete(menu);

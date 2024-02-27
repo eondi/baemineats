@@ -3,12 +3,14 @@ package com.sparta.baemineats.controller;
 import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import com.sparta.baemineats.dto.responseDto.MenuResponse;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
+import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,8 @@ public class MenuController {
 
     @PostMapping("/stores/{storeId}")
     @Operation(summary = "메뉴 등록", description = "메뉴를 등록한다")
-    public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @ModelAttribute MenuRequest requestDto) {
-        menuService.createMenu(storeId, requestDto);
+    public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @ModelAttribute MenuRequest requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        menuService.createMenu(storeId, requestDto, userDetails);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                         .httpStatus(HttpStatus.OK.value())
@@ -45,8 +47,8 @@ public class MenuController {
 
     @PutMapping("/{menuId}")
     @Operation(summary = "메뉴 수정", description = "메뉴를 수정한다")
-    public ResponseEntity<ResponseForm> updateMenu(@PathVariable Long menuId, @ModelAttribute MenuRequest requestDto) {
-        menuService.updateMenu(menuId, requestDto);
+    public ResponseEntity<ResponseForm> updateMenu(@PathVariable Long menuId, @ModelAttribute MenuRequest requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        menuService.updateMenu(menuId, requestDto, userDetails);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                         .httpStatus(HttpStatus.OK.value())
@@ -56,8 +58,8 @@ public class MenuController {
 
     @DeleteMapping("/{menuId}")
     @Operation(summary = "메뉴 삭제", description = "메뉴를 삭제한다")
-    public ResponseEntity<ResponseForm> deleteMenu(@PathVariable Long menuId) {
-        menuService.deleteMenu(menuId);
+    public ResponseEntity<ResponseForm> deleteMenu(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        menuService.deleteMenu(menuId, userDetails);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
                         .httpStatus(HttpStatus.OK.value())
