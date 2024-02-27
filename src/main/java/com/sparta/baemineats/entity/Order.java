@@ -1,6 +1,7 @@
 package com.sparta.baemineats.entity;
 
 import com.sparta.baemineats.dto.requestDto.OrderRequest;
+import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,8 +50,12 @@ public class Order {
         this.store = store;
         this.user = user;
         this.menu = menu;
-        this.orderComplete = false;
+        this.orderComplete = true;
         this.createTime = LocalDateTime.now();
         this.orderState = request.getOrderState();
+    }
+
+    public void updateOrderState(OrderUpdate orderUpdate){
+        this.orderState = orderUpdate.getOrderState();
     }
 }
