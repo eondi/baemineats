@@ -19,10 +19,9 @@ public class MenuService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public MenuResponse createMenu(Long storeId, MenuRequest requestDto) {
+    public void createMenu(Long storeId, MenuRequest requestDto) {
         Store store = findStoreId(storeId);
-        Menu menu = menuRepository.save(new Menu(requestDto, store));
-        return new MenuResponse(menu);
+        menuRepository.save(new Menu(requestDto, store));
     }
 
     public List<MenuResponse> getMenus() {
@@ -34,20 +33,18 @@ public class MenuService {
     }
 
     @Transactional
-    public Long updateMenu(Long menuId, MenuRequest requestDto) {
+    public void updateMenu(Long menuId, MenuRequest requestDto) {
         Menu menu = findMenu(menuId);
 
         menu.update(requestDto);
-        return menuId;
+        menuRepository.save(menu);
     }
 
     @Transactional
-    public Long deleteMenu(Long menuId) {
+    public void deleteMenu(Long menuId) {
         Menu menu = findMenu(menuId);
 
         menuRepository.delete(menu);
-
-        return menuId;
     }
 
     private Store findStoreId(Long storeId) {
