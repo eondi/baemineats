@@ -125,14 +125,15 @@ class OrderServiceIntegrationTest {
         // createOrderFromCart 메소드를 통해 주문 생성
         List<Order> createdOrders = orderService.createOrderFromCart(testUser);
         Order createdOrder = createdOrders.get(0);
-
-        // when - then
-        // updateOrderState 메소드 호출
         OrderUpdate orderUpdate = new OrderUpdate(Order.OrderStateEnum.DELIVERING);
-        orderService.updateOrderState(createdOrder.getOrderId(), orderUpdate, testUser);
 
-        // 주문 상태가 업데이트 되었는지 확인
+        // when
+        // updateOrderState 메소드 호출
+        orderService.updateOrderState(createdOrder.getOrderId(), orderUpdate, testUser);
         Order updatedOrder = orderRepository.findById(createdOrder.getOrderId()).orElseThrow();
+
+        // then
+        // 주문 상태가 업데이트 되었는지 확인
         assertEquals(Order.OrderStateEnum.DELIVERING, updatedOrder.getOrderState());
     }
 
@@ -144,10 +145,11 @@ class OrderServiceIntegrationTest {
         List<Order> createdOrders = orderService.createOrderFromCart(testUser);
         Order createdOrder = createdOrders.get(0);
 
-        // when - then
+        // when
         // deleteOrder 메소드 호출
         orderService.deleteOrder(createdOrder.getOrderId(), testUser);
 
+        // then
         // 주문이 삭제되었는지 확인
         assertFalse(orderRepository.existsById(createdOrder.getOrderId()));
     }
