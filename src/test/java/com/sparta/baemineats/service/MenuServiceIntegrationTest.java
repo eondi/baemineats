@@ -36,11 +36,6 @@ class MenuServiceIntegrationTest {
 
     Long createdId;
 
-    UserDetailsImpl userDetails = new UserDetailsImpl(
-            new User("asdf1234",
-                    "asdfA1234!",
-                    "경기도", "asd@email.com", UserRoleEnum.SELLER));
-
     @Test
     @Order(1)
     @DisplayName("메뉴 등록하기")
@@ -60,7 +55,7 @@ class MenuServiceIntegrationTest {
         MenuRequest requestDto = new MenuRequest(menuName, menuPrice, menuDescription, image);
 
         // when - then
-        menuService.createMenu(storeId, requestDto, userDetails);
+        menuService.createMenu(storeId, requestDto);
 
         List<MenuResponse> menus = menuService.getMenus();
         MenuResponse createdMenu = menus.get(menus.size() - 1); // 가장 최근에 등록된 메뉴 가져오기
@@ -88,7 +83,7 @@ class MenuServiceIntegrationTest {
         MenuRequest requestDto = new MenuRequest(menuName, menuPrice, menuDescription, image);
 
         // when - then
-        menuService.updateMenu(menuId, requestDto, userDetails);
+        menuService.updateMenu(menuId, requestDto);
     }
 
     @Test
