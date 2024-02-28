@@ -66,6 +66,7 @@ public class User extends TimeStamped{
         this.role = UserRoleEnum.USER;
     }
 
+
     public void userProfileAllUpdate(UserModifyAllRequestDto requestDto) {
         this.email = requestDto.getEmail();
         this.description = requestDto.getDescription();
