@@ -9,6 +9,7 @@ import com.sparta.baemineats.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,8 @@ public class OrderController {
 //                    .message("주문 생성")
 //                    .build());
 //    }
+
+@PreAuthorize("hasRole('ROLE_USER')")
 @PostMapping("")
 public ResponseEntity<ResponseForm> createOrderFromCart(
         @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -46,22 +49,15 @@ public ResponseEntity<ResponseForm> createOrderFromCart(
                     .build());
 }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_SELLER')")
     @GetMapping("")
-    public List<OrderResponse> getOrders() {
-        return orderService.getOrders();
+    public List<OrderResponse> getOrders(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return orderService.getOrders(userDetails);
     }
 
-
-//    @PutMapping("/{orderId}")
-//    public ResponseEntity<ResponseForm> completeOrder(@PathVariable Long orderId) {
-//        orderService.completeOrder(orderId);
-//        return ResponseEntity.ok()
-//                .body(ResponseForm.builder()
-//                        .httpStatus(HttpStatus.OK.value())
-//                        .message("주문 완료")
-//                        .build());
-//    }
-
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @PutMapping("/state/{orderId}")
     public ResponseEntity<ResponseForm> updateOrderState(
             @PathVariable Long orderId,
@@ -75,6 +71,8 @@ public ResponseEntity<ResponseForm> createOrderFromCart(
                         .message("주문 상태 변경")
                         .build());
     }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{orderId}")
     public ResponseEntity<ResponseForm> deleteOrder(
             @PathVariable Long orderId,
