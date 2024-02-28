@@ -32,6 +32,10 @@ public class Review {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
     @Column(nullable = false)
     private String content;
 
@@ -39,11 +43,12 @@ public class Review {
     private double rate;
 
 
-    public Review(ReviewRequest request, User user, Order order, Store store, Menu menu) {
+    public Review(ReviewRequest request, User user, Order order, Store store, Cart cart,Menu menu) {
         this.order = order;
         this.store = store;
         this.user = user;
         this.menu =menu;
+        this.cart = cart;
         this.content = request.getContent();
         this.rate =request.getRate();
     }
