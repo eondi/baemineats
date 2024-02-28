@@ -3,7 +3,6 @@ package com.sparta.baemineats.controller;
 import com.sparta.baemineats.dto.requestDto.CartRequest;
 import com.sparta.baemineats.dto.responseDto.CartResponse;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
-import com.sparta.baemineats.entity.Menu;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/carts")
+@RequestMapping("/api/carts")
 public class CartController {
     private final CartService cartService;
 

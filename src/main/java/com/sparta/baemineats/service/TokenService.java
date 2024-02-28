@@ -23,7 +23,4 @@ public class TokenService {
                 );
     }
 
-    public boolean isUserLoggedIn(String token) {
-        return tokenRepository.existsByToken(token);
-    }
 }
