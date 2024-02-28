@@ -29,7 +29,6 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
 
     private final TokenRepository tokenRepository;
-    private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

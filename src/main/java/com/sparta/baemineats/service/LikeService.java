@@ -8,7 +8,6 @@ import com.sparta.baemineats.entity.User;
 import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
