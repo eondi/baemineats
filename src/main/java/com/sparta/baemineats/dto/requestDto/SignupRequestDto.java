@@ -23,13 +23,13 @@ public class SignupRequestDto {
     @NotBlank(message = "주소를 필수로 입력 해주세요.")
     private String address;
 
-    private UserRoleEnum userRoleEnum;
+    private UserRoleEnum role;
 
     public SignupRequestDto(String userName, String password, String address, String email, UserRoleEnum userRoleEnum) {
         this.userName = userName;
         this.password = password;
         this.address = address;
         this.email = email;
-        this.userRoleEnum = userRoleEnum;
+        this.role = userRoleEnum;
     }
 }
