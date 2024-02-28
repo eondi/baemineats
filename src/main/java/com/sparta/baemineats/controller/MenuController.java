@@ -3,12 +3,15 @@ package com.sparta.baemineats.controller;
 import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import com.sparta.baemineats.dto.responseDto.MenuResponse;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
+import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +24,9 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping("/stores/{storeId}")
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @Operation(summary = "메뉴 등록", description = "메뉴를 등록한다")
-    public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @RequestBody MenuRequest requestDto) {
+    public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @ModelAttribute MenuRequest requestDto) {
         menuService.createMenu(storeId, requestDto);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
@@ -44,8 +48,9 @@ public class MenuController {
     }
 
     @PutMapping("/{menuId}")
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @Operation(summary = "메뉴 수정", description = "메뉴를 수정한다")
-    public ResponseEntity<ResponseForm> updateMenu(@PathVariable Long menuId, @RequestBody MenuRequest requestDto) {
+    public ResponseEntity<ResponseForm> updateMenu(@PathVariable Long menuId, @ModelAttribute MenuRequest requestDto) {
         menuService.updateMenu(menuId, requestDto);
         return ResponseEntity.ok()
                 .body(ResponseForm.builder()
@@ -55,6 +60,7 @@ public class MenuController {
     }
 
     @DeleteMapping("/{menuId}")
+    @PreAuthorize("hasRole('ROLE_SELLER')")
     @Operation(summary = "메뉴 삭제", description = "메뉴를 삭제한다")
     public ResponseEntity<ResponseForm> deleteMenu(@PathVariable Long menuId) {
         menuService.deleteMenu(menuId);

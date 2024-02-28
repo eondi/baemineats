@@ -4,9 +4,12 @@ import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import com.sparta.baemineats.dto.responseDto.MenuResponse;
 import com.sparta.baemineats.entity.Menu;
 import com.sparta.baemineats.entity.Store;
+import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.MenuRepository;
 import com.sparta.baemineats.repository.StoreRepository;
+import com.sparta.baemineats.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,41 +19,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuService {
     private final MenuRepository menuRepository;
+    private final UploadService uploadService;
     private final StoreRepository storeRepository;
 
     @Transactional
-    public MenuResponse createMenu(Long storeId, MenuRequest requestDto) {
+    public void createMenu(Long storeId, MenuRequest requestDto) {
+
+        String imageUrl = uploadService.uploadImageAndGetUrl(requestDto.getImage());
         Store store = findStoreId(storeId);
-        Menu menu = menuRepository.save(new Menu(requestDto, store));
-        return new MenuResponse(menu);
+        menuRepository.save(new Menu(requestDto, store, imageUrl));
     }
 
+    @Transactional(readOnly = true)
     public List<MenuResponse> getMenus() {
-        return menuRepository.findAll().stream().map(MenuResponse::new).toList();
+        return menuRepository.findAll().stream().map(menu -> new MenuResponse(menu, menu.getImageUrl())).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<MenuResponse> getMenuFindById(Long menuId) {
-        return menuRepository.findMenuByMenuId(menuId).stream().map(MenuResponse::new).toList();
+        return menuRepository.findMenuByMenuId(menuId).stream().map(menu -> new MenuResponse(menu, menu.getImageUrl())).toList();
     }
 
     @Transactional
-    public Long updateMenu(Long menuId, MenuRequest requestDto) {
+    public void updateMenu(Long menuId, MenuRequest requestDto) {
+
         Menu menu = findMenu(menuId);
+        String imageUrl = uploadService.uploadImageAndGetUrl(requestDto.getImage());
 
-        menu.update(requestDto);
-
+        menu.update(requestDto, imageUrl);
         menuRepository.save(menu);
-
-        return menuId;
     }
 
     @Transactional
-    public Long deleteMenu(Long menuId) {
+    public void deleteMenu(Long menuId) {
+
         Menu menu = findMenu(menuId);
 
         menuRepository.delete(menu);
-
-        return menuId;
     }
 
     private Store findStoreId(Long storeId) {
