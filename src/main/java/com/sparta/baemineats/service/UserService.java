@@ -74,7 +74,6 @@ public class UserService {
 
         findUser.userProfileAllUpdate(requestDto);
 
-        userRepository.save(findUser);
     }
 
     @Transactional
@@ -92,7 +91,6 @@ public class UserService {
 
         findUser.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
 
-        userRepository.save(findUser);
 
     }
 
