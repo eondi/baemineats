@@ -1,6 +1,6 @@
 package com.sparta.baemineats.dto.requestDto;
 
-import lombok.*;
+import lombok.Getter;
 
 @Getter
 public class OrderUpdate {
