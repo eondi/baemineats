@@ -42,7 +42,6 @@ class OrderServiceIntegrationTest {
     private User testUser;
     private Store testStore;
     private Menu testMenu;
-    private Cart testCart;
 
     @BeforeAll
     void setUp() throws IOException {
@@ -90,7 +89,7 @@ class OrderServiceIntegrationTest {
         int totalPrice = 1;
 
         CartRequest cartrequest = new CartRequest(storeId, userId, menuId, quantity ,totalPrice);
-        testCart = cartRepository.save(new Cart(cartrequest, testUser,testStore,testMenu));
+        cartRepository.save(new Cart(cartrequest, testUser,testStore,testMenu));
 
 //        when - then
         // createOrderFromCart 메소드 호출
