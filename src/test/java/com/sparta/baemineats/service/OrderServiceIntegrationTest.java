@@ -1,15 +1,11 @@
 package com.sparta.baemineats.service;
 
-import com.sparta.baemineats.dto.requestDto.CartRequest;
-import com.sparta.baemineats.dto.requestDto.MenuRequest;
-import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
-import com.sparta.baemineats.dto.requestDto.StoreRequest;
+import com.sparta.baemineats.dto.requestDto.*;
+import com.sparta.baemineats.dto.responseDto.OrderResponse;
 import com.sparta.baemineats.entity.*;
 import com.sparta.baemineats.entity.Order;
-import com.sparta.baemineats.repository.CartRepository;
-import com.sparta.baemineats.repository.MenuRepository;
-import com.sparta.baemineats.repository.StoreRepository;
-import com.sparta.baemineats.repository.UserRepository;
+import com.sparta.baemineats.repository.*;
+import com.sparta.baemineats.security.UserDetailsImpl;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,6 +30,8 @@ class OrderServiceIntegrationTest {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private CartRepository cartRepository;
@@ -43,6 +42,7 @@ class OrderServiceIntegrationTest {
     private User testUser;
     private Store testStore;
     private Menu testMenu;
+    private Cart testCart;
 
     @BeforeAll
     void setUp() throws IOException {
@@ -73,7 +73,7 @@ class OrderServiceIntegrationTest {
                 "image/png",
                 new FileInputStream(new File("/Users/Ssumin/Desktop/icon-search.png")));
 
-                MenuRequest requestDto = new MenuRequest(menuName, menuPrice, menuDescription, image);
+        MenuRequest requestDto = new MenuRequest(menuName, menuPrice, menuDescription, image);
         testMenu = menuRepository.save(new Menu(requestDto, testStore, ""));
 
     }
@@ -90,7 +90,7 @@ class OrderServiceIntegrationTest {
         int totalPrice = 1;
 
         CartRequest cartrequest = new CartRequest(storeId, userId, menuId, quantity ,totalPrice);
-        cartRepository.save(new Cart(cartrequest, testUser,testStore,testMenu));
+        testCart = cartRepository.save(new Cart(cartrequest, testUser,testStore,testMenu));
 
 //        when - then
         // createOrderFromCart 메소드 호출
@@ -99,6 +99,59 @@ class OrderServiceIntegrationTest {
         // 반환된 주문 목록이 비어 있지 않음을 확인
         assertFalse(orders.isEmpty());
     }
+    @Test
+    @DisplayName("주문 조회")
+    void test2() throws IOException {
+        // given
+        // createOrderFromCart 메소드를 통해 주문 생성
+        List<Order> createdOrders = orderService.createOrderFromCart(testUser);
+
+        // when - then
+        // getOrders 메소드 호출
+        UserDetailsImpl userDetails = new UserDetailsImpl(testUser);
+        List<OrderResponse> orders = orderService.getOrders(userDetails);
+
+        // 반환된 주문 목록이 비어 있지 않음을 확인
+        assertFalse(orders.isEmpty());
+
+        // 반환된 주문 목록의 크기가 생성된 주문의 수와 같은지 확인
+        assertEquals(createdOrders.size(), orders.size());
+    }
+
+    @Test
+    @DisplayName("주문 상태 업데이트")
+    void test3() throws IOException {
+        // given
+        // createOrderFromCart 메소드를 통해 주문 생성
+        List<Order> createdOrders = orderService.createOrderFromCart(testUser);
+        Order createdOrder = createdOrders.get(0);
+
+        // when - then
+        // updateOrderState 메소드 호출
+        OrderUpdate orderUpdate = new OrderUpdate(Order.OrderStateEnum.DELIVERING);
+        orderService.updateOrderState(createdOrder.getOrderId(), orderUpdate, testUser);
+
+        // 주문 상태가 업데이트 되었는지 확인
+        Order updatedOrder = orderRepository.findById(createdOrder.getOrderId()).orElseThrow();
+        assertEquals(Order.OrderStateEnum.DELIVERING, updatedOrder.getOrderState());
+    }
+
+    @Test
+    @DisplayName("주문 삭제")
+    void test4() throws IOException {
+        // given
+        // createOrderFromCart 메소드를 통해 주문 생성
+        List<Order> createdOrders = orderService.createOrderFromCart(testUser);
+        Order createdOrder = createdOrders.get(0);
+
+        // when - then
+        // deleteOrder 메소드 호출
+        orderService.deleteOrder(createdOrder.getOrderId(), testUser);
+
+        // 주문이 삭제되었는지 확인
+        assertFalse(orderRepository.existsById(createdOrder.getOrderId()));
+    }
+
 
 
 }
