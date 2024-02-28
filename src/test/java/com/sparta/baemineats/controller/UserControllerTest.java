@@ -114,6 +114,12 @@ class UserControllerTest {
         verify(userService, times(1)).login(any(LoginRequestDto.class), any(HttpServletResponse.class));
     }
 
+    @Test
+    @DisplayName("로그인된 유저 로그아웃 테스트")
+    void test3() {
+
+    }
+
 
 
 
