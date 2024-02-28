@@ -56,7 +56,7 @@ public class StoreService {
         Store store = findStore(storeId);
 
         // 매장 유저 확인
-        if (!store.getSellrName().equals(user.getUsername()))
+        if (!store.getSellerName().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 판매자의 매장 수정은 불가능합니다.");
 
         // 매장 수정
@@ -84,7 +84,7 @@ public class StoreService {
         String storeName = store.getStoreName();
 
         // 매장 유저 확인
-      if (!store.getSellrName().equals(user.getUsername()))
+      if (!store.getSellerName().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 판매자의 매장 삭제는 불가능합니다.");
         // 매장 삭제
         storeRepository.delete(store);
