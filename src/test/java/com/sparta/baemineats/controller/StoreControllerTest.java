@@ -20,6 +20,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -46,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         }
 )
 @DisabledInAotMode
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableMethodSecurity(securedEnabled = true)
 class StoreControllerTest {
     private MockMvc mvc;
 
@@ -202,7 +203,7 @@ class StoreControllerTest {
 
         resultActions.andExpect(status().is4xxClientError());
 
-        resultActions.andExpect(content().json("{\"statusCode\":400,\"state\":\"BAD_REQUEST\",\"message\":\"Access is denied\"}"));
+        resultActions.andExpect(content().json("{\"statusCode\":400,\"state\":\"BAD_REQUEST\",\"message\":\"Access Denied\"}"));
     }
 
     @Test
