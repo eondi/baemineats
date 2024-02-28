@@ -1,6 +1,6 @@
 package com.sparta.baemineats.entity;
 
-import com.sparta.baemineats.dto.requestDto.OrderRequest;
+import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,21 +13,21 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "orders")
-public class Order {
+public class Order extends TimeStamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
@@ -45,12 +45,17 @@ public class Order {
     private String orderState;
 
 
-    public Order(OrderRequest request, User user, Store store, Menu menu) {
+    public Order(User user, Store store, Menu menu) {
         this.store = store;
         this.user = user;
         this.menu = menu;
         this.orderComplete = false;
         this.createTime = LocalDateTime.now();
-        this.orderState = request.getOrderState();
+        // todo : 후에 기능추가
+        this.orderState = "";
+    }
+
+    public void updateOrderState(OrderUpdate orderUpdate){
+        this.orderState = orderUpdate.getOrderState();
     }
 }

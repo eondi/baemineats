@@ -2,7 +2,6 @@ package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.ReviewRequest;
 import com.sparta.baemineats.dto.responseDto.ReviewResponse;
-import com.sparta.baemineats.dto.responseDto.StoreResponse;
 import com.sparta.baemineats.dto.responseDto.StoreReviewResponse;
 import com.sparta.baemineats.entity.*;
 import com.sparta.baemineats.repository.CartRepository;

@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/stores")
+@RequestMapping("/api/stores")
 public class StoreController {
     private final StoreRepository storeRepository;
 
@@ -87,18 +87,6 @@ public class StoreController {
                 .body(ResponseForm.builder()
                         .httpStatus(HttpStatus.OK.value())
                         .message("해당 음식점 삭제를 성공했습니다. 음식점 : " + response)
-                        .build());
-    }
-
-    @GetMapping("/like/{storeId}")
-    @Operation(summary = "음식점 좋아요", description = "특정 음식점에 좋아요를 할수있다 (찜)")
-    public ResponseEntity<ResponseForm> likeStore(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String response = storeService.likeStore(storeId, userDetails.getUser());
-
-        return ResponseEntity.ok()
-                .body(ResponseForm.builder()
-                        .httpStatus(HttpStatus.OK.value())
-                        .message(" 음식점 :" + response + " 에 좋아요를 성공했습니다.")
                         .build());
     }
 

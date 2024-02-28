@@ -11,12 +11,12 @@ import lombok.Setter;
 @Setter
 @Table(name = "menus")
 @NoArgsConstructor
-public class Menu {
+public class Menu extends TimeStamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 

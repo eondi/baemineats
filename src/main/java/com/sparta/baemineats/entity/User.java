@@ -8,13 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User {
+public class User extends TimeStamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,6 +86,14 @@ public class User {
 
     public void deActiveUser() {
         this.active = false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(userId, getUserId());
     }
 
 }

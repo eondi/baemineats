@@ -30,12 +30,15 @@ public class LikeService {
         String storeName = store.getStoreName();
 
         // 좋아요 확인
-        if (!likeRepository.findByUser_UserId(user.getUserId()).isEmpty() && !likeRepository.findByStore_StoreId(store.getStoreId()).isEmpty()) {
-            throw new IllegalArgumentException("좋아요는 중복이 불가합니다");
+        List<Like> likeList = likeRepository.findByUser_UserId(user.getUserId());
+
+        for (Like like : likeList){
+            if (like.getStore().getStoreId().equals(storeId)){
+                throw new IllegalArgumentException("좋아요는 중복이 불가합니다");
+                }
         }
-        else{
-            likeRepository.save(new Like(store, user));
-        }
+
+        likeRepository.save(new Like(store, user));
 
         return  storeName;
     }

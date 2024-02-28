@@ -4,7 +4,6 @@ import com.sparta.baemineats.dto.requestDto.ReviewRequest;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.dto.responseDto.ReviewResponse;
 import com.sparta.baemineats.dto.responseDto.StoreReviewResponse;
-import com.sparta.baemineats.entity.Review;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;

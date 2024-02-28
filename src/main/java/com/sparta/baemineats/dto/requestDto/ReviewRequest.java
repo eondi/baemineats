@@ -1,7 +1,6 @@
 package com.sparta.baemineats.dto.requestDto;
 
 import lombok.Getter;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Getter
 public class ReviewRequest {
