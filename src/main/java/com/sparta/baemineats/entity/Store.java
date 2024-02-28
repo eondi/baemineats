@@ -2,7 +2,6 @@ package com.sparta.baemineats.entity;
 
 import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,13 +35,5 @@ public class Store extends TimeStamped{
     public void update(StoreRequest request) {
         this.storeName = request.getStoreName();
         this.storeDescription = request.getStoreDescription();
-    }
-
-    @Builder
-    public Store(Long id, String storeName, String storeDescription, String username) {
-        this.storeId = id;
-        this.storeName = storeName;
-        this.storeDescription = storeDescription;
-        this.sellerName = username;
     }
 }
