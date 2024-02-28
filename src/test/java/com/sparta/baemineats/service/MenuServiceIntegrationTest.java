@@ -1,12 +1,11 @@
 package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.MenuRequest;
+import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import com.sparta.baemineats.dto.responseDto.MenuResponse;
-import com.sparta.baemineats.entity.User;
-import com.sparta.baemineats.entity.UserRoleEnum;
+import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.repository.MenuRepository;
 import com.sparta.baemineats.repository.StoreRepository;
-import com.sparta.baemineats.security.UserDetailsImpl;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +40,12 @@ class MenuServiceIntegrationTest {
     @DisplayName("메뉴 등록하기")
     void test1() throws IOException {
         // given
+        String storeName = "홍콩반점";
+        String storeDescription = "맛있는 가게";
+        StoreRequest request = new StoreRequest(storeName,storeDescription);
+        storeRepository.save(new Store(request, "사장"));
         Long storeId = 1L;
+
         String menuName = "탕수육";
         int menuPrice = 25000;
         String menuDescription = "돼지고기 : 국내산";
@@ -92,7 +96,7 @@ class MenuServiceIntegrationTest {
     void test3() {
         // given
         Long menuId = createdId;
-        String imageUrl = "/uploads/b.png";
+        String imageUrl = "http://localhost:8080/uploads/b.png";
         int menuPrice = 20000;
 
         // when
