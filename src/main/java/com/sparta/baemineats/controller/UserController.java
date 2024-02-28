@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -121,7 +121,7 @@ public class UserController {
                         .build());
     }
 
-    @GetMapping("/admin/all")
+    @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseForm> findAllUser() {
 
