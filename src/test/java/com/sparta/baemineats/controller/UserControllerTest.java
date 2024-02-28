@@ -5,23 +5,21 @@ import com.sparta.baemineats.config.WebSecurityConfig;
 import com.sparta.baemineats.dto.requestDto.LoginRequestDto;
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.entity.User;
-import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,7 +33,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,6 +71,7 @@ class UserControllerTest {
                 .apply(springSecurity(new MockSpringSecurityFilter()))
                 .build();
     }
+
 
     @Test
     @DisplayName(" UserController signup 정상적으로 회원가입 테스트")
@@ -116,9 +114,24 @@ class UserControllerTest {
 
     @Test
     @DisplayName("로그인된 유저 로그아웃 테스트")
-    void test3() {
+    void test3() throws Exception{
+        //given
+        MockHttpServletRequest request = new MockHttpServletRequest();
 
+        // When/Then (실행 및 검증)
+        mvc.perform(post("/api/user/logout"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.message").value("로그아웃 완료"));
+
+        verify(userService,times(1)).logout(any(HttpServletRequest.class));
     }
+
+
+
+
+
+
 
 
 
