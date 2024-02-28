@@ -103,7 +103,7 @@ public class UserService {
 
     }
 
-    private User findUserByUsername(String username) {
+    public User findUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(
                 () -> new NoSuchElementException("유저가 존재하지 않습니다.")
         );

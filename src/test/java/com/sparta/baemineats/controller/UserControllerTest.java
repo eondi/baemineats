@@ -93,6 +93,26 @@ class UserControllerTest {
 
     }
 
+    @Test
+    @DisplayName("회원가입된 유저가 로그인 테스트")
+    void test2() throws Exception {
+        // Given
+       User user = new User("bob4",passwordEncoder.encode("aAa123456@"), "어쩔아파트 저쩔 동 이쩔호","asdfsadf@naver.com");
+
+      when(userService.findUserByUsername(eq("bob4"))).thenReturn(user);
+        LoginRequestDto request = new LoginRequestDto("bob4","aAa123456@");
+
+        // When/Then
+        mvc.perform(post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.message").value("로그인 성공"));
+
+
+        verify(userService, times(1)).login(any(LoginRequestDto.class), any(HttpServletResponse.class));
+    }
 
 
 
