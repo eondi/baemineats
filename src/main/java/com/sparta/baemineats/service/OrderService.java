@@ -4,6 +4,7 @@ import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import com.sparta.baemineats.dto.responseDto.OrderResponse;
 import com.sparta.baemineats.entity.*;
 import com.sparta.baemineats.repository.*;
+import com.sparta.baemineats.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +17,13 @@ import java.util.List;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
     private final StoreRepository storeRepository;
-    private final MenuRepository menuRepository;
     private final CartRepository cartRepository;
+//    private final MenuRepository menuRepository;
+//    private final UserRepository userRepository;
+
+//    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
 
 
 //    @Transactional
@@ -68,22 +72,30 @@ public class OrderService {
         return newOrders;
     }
 
-
-    @Transactional
-    public List<OrderResponse> getOrders(){
-        return orderRepository.findAll().stream().map(OrderResponse::new).toList();
-
-    }
-
-//    @Transactional
-//    public void completeOrder(Long orderId){
-//        Order order = orderRepository.findById(orderId).orElseThrow(()
-//                -> new IllegalArgumentException("주문이 존재하지 않습니다."));
-//        order.setOrderState("주문완료");
-//        order.setOrderComplete(true);
-//        order.setConfirmTime(LocalDateTime.now());
-//        orderRepository.save(order);
+//    public List<OrderResponse> getOrders(UserDetailsImpl userDetails){
+//        User user = userDetails.getUser();
+//        String sellerName = user.getUsername();
+//        Store store = storeRepository.findBySellerName(sellerName);
+//        logger.info("Store: " + store);  // 로그 출력
+//        logger.info("Username: " + user.getUsername());  // 로그 출력
+//        // ...
+//        return null;
 //    }
+    @Transactional
+    public List<OrderResponse> getOrders(UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        if (user.getRole().equals(UserRoleEnum.USER)) {
+            // 사용자가 주문한 주문만 조회
+            return orderRepository.findByUser(user).stream().map(OrderResponse::new).toList();
+        } else if (user.getRole().equals(UserRoleEnum.SELLER)) {
+            // 판매자가 운영하는 가게에 대한 주문만 조회
+            String sellerName = user.getUsername();
+            Store store = storeRepository.findBySellerName(sellerName);
+            return orderRepository.findByStore(store).stream().map(OrderResponse::new).toList();
+        }
+        // todo: 주문조회기능 따로 만들기
+        throw new IllegalArgumentException("주문 조회 권한이 없습니다.");
+    }
 
     @Transactional
     public void updateOrderState(Long orderId, OrderUpdate orderUpdate, User user){
