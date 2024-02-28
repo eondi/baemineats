@@ -16,7 +16,7 @@ public class UserModifyAllRequestDto {
     @Email(message = "올바른 email 형식이 아닙니다.")
     private String email;
 
-    @NotBlank(message = "주소를 필수로 입력해주세요.")
+    @NotNull(message = "주소를 필수로 입력해주세요.")
     private String address;
 
 }
