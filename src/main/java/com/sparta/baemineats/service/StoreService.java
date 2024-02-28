@@ -4,7 +4,6 @@ import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import com.sparta.baemineats.dto.responseDto.StoreResponse;
 import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.entity.User;
-import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.LikeRepository;
 import com.sparta.baemineats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;

@@ -24,21 +24,16 @@ public class User extends TimeStamped{
     private Long userId;
 
     @Column(nullable = false, unique = true)
-
     private String username;
-
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-
     private String description = "잘부탁드립니다.";
-
 
     @Column(nullable = false)
     private String address;
-
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -56,7 +51,7 @@ public class User extends TimeStamped{
         this.password = encodedPassword;
         this.address = requestDto.getAddress();
         this.email = requestDto.getEmail();
-        this.role = requestDto.getUserRoleEnum();
+        this.role = requestDto.getRole();
     }
 
     public User(String username, String password, String address, String email) {

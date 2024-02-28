@@ -74,7 +74,6 @@ public class UserService {
 
         findUser.userProfileAllUpdate(requestDto);
 
-        userRepository.save(findUser);
     }
 
     @Transactional
@@ -92,7 +91,6 @@ public class UserService {
 
         findUser.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
 
-        userRepository.save(findUser);
 
     }
 
@@ -102,7 +100,7 @@ public class UserService {
 
         findUser.deActiveUser();
 
-        userRepository.save(findUser);
+
     }
 
     private User findUserByUsername(String username) {
@@ -120,7 +118,7 @@ public class UserService {
 
     @Transactional
     public void login(LoginRequestDto requestDto,
-                      HttpServletResponse response) throws LoginException {
+                      HttpServletResponse response) throws Exception {
         User user = findUserByUsername(requestDto.getUsername());
 
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
