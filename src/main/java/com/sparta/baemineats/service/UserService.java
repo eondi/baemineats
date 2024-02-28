@@ -120,7 +120,7 @@ public class UserService {
 
     @Transactional
     public void login(LoginRequestDto requestDto,
-                      HttpServletResponse response) throws LoginException {
+                      HttpServletResponse response) throws Exception {
         User user = findUserByUsername(requestDto.getUsername());
 
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
