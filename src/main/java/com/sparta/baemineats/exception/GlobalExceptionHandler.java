@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.security.auth.login.LoginException;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionForm> IllegalArgumentException(IllegalArgumentException e){
         return ResponseEntity.badRequest()
                 .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
+                        e.getMessage()));
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public ResponseEntity<ExceptionForm> LoginException(LoginException e){
+        return ResponseEntity.badRequest()
+                .body(new ExceptionForm((HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST,
                         e.getMessage()));
     }
 }
