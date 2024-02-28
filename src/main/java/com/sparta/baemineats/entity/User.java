@@ -5,6 +5,7 @@ import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
 import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,14 +67,6 @@ public class User extends TimeStamped{
         this.role = UserRoleEnum.USER;
     }
 
-    public User(String username, String password, String address, String email, UserRoleEnum role) {
-        this.username = username;
-        this.password = password;
-        this.address = address;
-        this.email = email;
-        this.role = role;
-    }
-
     public void userProfileAllUpdate(UserModifyAllRequestDto requestDto) {
         this.email = requestDto.getEmail();
         this.description = requestDto.getDescription();
@@ -94,6 +87,17 @@ public class User extends TimeStamped{
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(userId, getUserId());
+    }
+
+    //TEST
+    @Builder
+    public User(Long id, String username, String password, String address, String email, UserRoleEnum role) {
+        this.userId = id;
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.email = email;
+        this.role = role;
     }
 
 }

@@ -16,7 +16,4 @@ public class StoreResponse {
         this.storeDescription = store.getStoreDescription();
     }
 
-    public StoreResponse(String storeName) {
-        this.storeName = storeName;
-    }
 }

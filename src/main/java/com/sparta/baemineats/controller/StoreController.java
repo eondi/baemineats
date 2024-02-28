@@ -3,7 +3,6 @@ package com.sparta.baemineats.controller;
 import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.dto.responseDto.StoreResponse;
-import com.sparta.baemineats.repository.StoreRepository;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;

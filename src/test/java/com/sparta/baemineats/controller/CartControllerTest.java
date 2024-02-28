@@ -2,23 +2,22 @@ package com.sparta.baemineats.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.baemineats.config.WebSecurityConfig;
-import com.sparta.baemineats.dto.requestDto.LoginRequestDto;
+import com.sparta.baemineats.dto.requestDto.CartRequest;
 import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import com.sparta.baemineats.dto.requestDto.StoreRequest;
+import com.sparta.baemineats.entity.Menu;
 import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.entity.User;
 import com.sparta.baemineats.entity.UserRoleEnum;
+import com.sparta.baemineats.repository.MenuRepository;
 import com.sparta.baemineats.repository.StoreRepository;
 import com.sparta.baemineats.security.UserDetailsImpl;
+import com.sparta.baemineats.service.CartService;
 import com.sparta.baemineats.service.MenuService;
 import com.sparta.baemineats.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,27 +26,23 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.Principal;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(
-        controllers = {UserController.class, MenuController.class},
+        controllers = {UserController.class, CartController.class},
         excludeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
@@ -57,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 
 @DisabledInAotMode
-class MenuControllerTest {
+class CartControllerTest {
     private MockMvc mvc;
 
     private Principal mockPrincipal;
@@ -72,10 +67,13 @@ class MenuControllerTest {
     UserService userService;
 
     @MockBean
-    MenuService menuService;
+    CartService cartService;
 
     @MockBean
     StoreRepository storeRepository;
+
+    @MockBean
+    MenuRepository menuRepository;
 
     @BeforeEach
     public void setup() {
@@ -103,20 +101,26 @@ class MenuControllerTest {
         mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
     }
 
+    Long storeId;
+    Long userId = 1L;
+    Long menuId;
+
     @Test
-    @DisplayName("새로운 메뉴 등록")
-    void test3() throws Exception {
+    @DisplayName("장바구니 추가")
+    void test() throws Exception {
         // given
         this.mockUserSetup();
+
         String storeName = "홍콩반점";
         String storeDescription = "맛있는 가게";
-        StoreRequest request = new StoreRequest(storeName,storeDescription);
-        Store store = storeRepository.save(new Store(request, "사장"));
-
+        StoreRequest requestDto = new StoreRequest(storeName,storeDescription);
+        Store store = storeRepository.save(new Store(requestDto, "사장"));
+        this.storeId = store.getStoreId();
 
         String menuName = "탕수육";
         int menuPrice = 25000;
         String menuDescription = "돼지고기 : 국내산";
+        String imageUrl = "http://localhost:8080/uploads/b.png";
 
         MockMultipartFile image = new MockMultipartFile(
                 "test",
@@ -124,20 +128,53 @@ class MenuControllerTest {
                 "image/png",
                 new FileInputStream(new File("C:/Users/Owner/Pictures/Screenshots/a.png")));
 
-        MenuRequest requestDto = new MenuRequest(menuName, menuPrice, menuDescription, image);
-        Long storeId = 1L;
+        MenuRequest menuRequest = new MenuRequest(menuName, menuPrice, menuDescription, image);
+        Menu menu = new Menu(menuRequest, store, imageUrl);
+        Menu savedMenu = menuRepository.save(menu);
+        this.menuId = savedMenu.getMenuId();
+
+        Long quantity = 1L;
+        int totalPrice = 25000;
+        CartRequest request = new CartRequest(storeId,userId,menuId,quantity,totalPrice);
+
+        String postInfo = objectMapper.writeValueAsString(request);
+
         // when - then
-        mvc.perform(
-                multipart("/api/menus/stores/{storeId}",1)
-                        .file(image)
-                        .param("menuName", "탕수육")
-                        .param("menuPrice", "25000")
-                        .param("menuDescription", "돼지고기 : 국내산")
+        mvc.perform(post("/api/carts/add")
+                        .content(postInfo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                         .principal(mockPrincipal)
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("장바구니 조회")
+    void test2() throws Exception {
+        this.mockUserSetup();
 
+        mvc.perform(get("/api/carts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .principal(mockPrincipal)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("장바구니 삭제")
+    void test3() throws Exception {
+        this.mockUserSetup();
+
+        mvc.perform(delete("/api/carts/{menuId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .principal(mockPrincipal)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }
