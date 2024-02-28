@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/stores")
 public class StoreController {
-    private final StoreRepository storeRepository;
 
     private final StoreService storeService;
 
     @PostMapping
     @Operation(summary = "음식점 등록", description = "음식점을 등록한다")
+    @PreAuthorize("hasAnyRole('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<ResponseForm> createStore(@RequestBody StoreRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         StoreResponse response = storeService.createStore(request, userDetails.getUser());
@@ -67,6 +68,7 @@ public class StoreController {
 
     @PutMapping("{storeId}")
     @Operation(summary = "음식점 수정", description = "특정 음식점을 수정 한다")
+    @PreAuthorize("hasAnyRole('ROLE_SELLER')")
     public ResponseEntity<ResponseForm> updateStore(@PathVariable Long storeId, @RequestBody StoreRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StoreResponse response = storeService.updateStore(storeId, request, userDetails.getUser());
 
@@ -80,6 +82,7 @@ public class StoreController {
 
     @DeleteMapping("{storeId}")
     @Operation(summary = "음식점 삭제", description = "특정 음식점을 삭제 한다")
+    @PreAuthorize("hasAnyRole('ROLE_SELLER', 'ROLE_ADMIN')")
     public ResponseEntity<ResponseForm> deleteStore(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String response = storeService.deleteStore(storeId, userDetails.getUser());
 

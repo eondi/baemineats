@@ -29,16 +29,21 @@ public class Menu extends TimeStamped{
     @Column(nullable = false)
     private String menuDescription;
 
-    public Menu(MenuRequest requestDto, Store store) {
+    @Column(nullable = false)
+    private String imageUrl;
+
+    public Menu(MenuRequest requestDto, Store store, String imageUrl) {
         this.menuName = requestDto.getMenuName();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuDescription = requestDto.getMenuDescription();
         this.store = store;
+        this.imageUrl = imageUrl;
     }
 
-    public void update(MenuRequest requestDto) {
+    public void update(MenuRequest requestDto, String imageUrl) {
         this.menuName = requestDto.getMenuName();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuDescription = requestDto.getMenuDescription();
+        this.imageUrl = imageUrl;
     }
 }

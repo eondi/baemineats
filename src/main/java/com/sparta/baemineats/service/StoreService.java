@@ -21,10 +21,6 @@ public class StoreService {
     private final LikeRepository likeRepository;
 
     public StoreResponse createStore(StoreRequest request, User user) {
-        // 권한 판단
-        if (user.getRole().equals(UserRoleEnum.USER) )
-            throw new IllegalArgumentException("관리자, 판매자만 등록이 가능합니다.");
-
         // 매장 등록
         Store store = storeRepository.save(new Store(request, user.getUsername()));
 
@@ -56,17 +52,11 @@ public class StoreService {
 
     @Transactional
     public StoreResponse updateStore(Long storeId, StoreRequest request, User user) {
-
-        // 권한 판단
-        if (!user.getRole().equals(UserRoleEnum.SELLER) )
-            throw new IllegalArgumentException("판매자만 수정이 가능합니다.");
-
-
         // 해당 매장 조회
         Store store = findStore(storeId);
 
         // 매장 유저 확인
-        if (!store.getSellrName().equals(user.getUsername()))
+        if (!store.getSellerName().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 판매자의 매장 수정은 불가능합니다.");
 
         // 매장 수정
@@ -89,17 +79,12 @@ public class StoreService {
     @Transactional
     public String deleteStore(Long storeId, User user) {
 
-        // 권한 판단
-        if (user.getRole().equals(UserRoleEnum.USER) )
-            throw new IllegalArgumentException("관리자, 판매자만 삭제 가능합니다.");
-
-
         // 해당 매장 조회
         Store store = findStore(storeId);
         String storeName = store.getStoreName();
 
         // 매장 유저 확인
-      if (!store.getSellrName().equals(user.getUsername()))
+      if (!store.getSellerName().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 판매자의 매장 삭제는 불가능합니다.");
         // 매장 삭제
         storeRepository.delete(store);
