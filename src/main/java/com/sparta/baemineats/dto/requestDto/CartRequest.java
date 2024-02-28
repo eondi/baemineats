@@ -9,4 +9,12 @@ public class CartRequest {
     private Long menuId;
     private Long quantity;
     private int totalPrice;
+
+    public CartRequest(Long storeId, Long userId, Long menuId, Long quantity, int totalPrice) {
+        this.storeId = storeId;
+        this.userId = userId;
+        this.menuId = menuId;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+    }
 }
