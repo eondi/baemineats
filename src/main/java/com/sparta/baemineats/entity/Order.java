@@ -1,6 +1,6 @@
 package com.sparta.baemineats.entity;
 
-import com.sparta.baemineats.dto.requestDto.OrderRequest;
+import com.sparta.baemineats.dto.requestDto.OrderUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,12 +45,17 @@ public class Order extends TimeStamped{
     private String orderState;
 
 
-    public Order(OrderRequest request, User user, Store store, Menu menu) {
+    public Order(User user, Store store, Menu menu) {
         this.store = store;
         this.user = user;
         this.menu = menu;
         this.orderComplete = false;
         this.createTime = LocalDateTime.now();
-        this.orderState = request.getOrderState();
+        // todo : 후에 기능추가
+        this.orderState = "";
+    }
+
+    public void updateOrderState(OrderUpdate orderUpdate){
+        this.orderState = orderUpdate.getOrderState();
     }
 }
