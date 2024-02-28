@@ -5,8 +5,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class SignupRequestDto {
 
     @Pattern(regexp ="^[a-z0-9]{4,10}", message = "username은 숫자 및 알파벳 소문자 4~10자로 입력해주세요.")
@@ -22,4 +24,12 @@ public class SignupRequestDto {
     private String address;
 
     private UserRoleEnum userRoleEnum;
+
+    public SignupRequestDto(String userName, String password, String address, String email, UserRoleEnum userRoleEnum) {
+        this.userName = userName;
+        this.password = password;
+        this.address = address;
+        this.email = email;
+        this.userRoleEnum = userRoleEnum;
+    }
 }
