@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/stores")
+@RequestMapping("/api/store")
 public class StoreController {
 
     private final StoreService storeService;

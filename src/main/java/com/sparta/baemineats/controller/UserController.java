@@ -8,6 +8,7 @@ import com.sparta.baemineats.dto.responseDto.ResponseForm;
 import com.sparta.baemineats.dto.responseDto.ResponseUserList;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -33,6 +34,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
+    @Operation(summary = "회원가입", description = "회원가입 기능")
     public ResponseEntity<ResponseForm> createUser(
             @Valid @RequestBody SignupRequestDto requestDto,
             BindingResult bindingResult
@@ -51,6 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "로그인", description = "로그인 기능")
     public ResponseEntity<ResponseForm> login(
             @RequestBody LoginRequestDto requestDto,
             HttpServletResponse httpServletResponse) throws Exception {
@@ -65,6 +68,7 @@ public class UserController {
 
     @PostMapping("/logout")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN')")
+    @Operation(summary = "로그아웃", description = "로그아웃 기능")
     public ResponseEntity<ResponseForm> logout(
             HttpServletRequest request
     ){
@@ -78,6 +82,7 @@ public class UserController {
 
     @PutMapping("/profile")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SELLER', 'ROLE_ADMIN')")
+    @Operation(summary = "프로필 수정", description = "한줄소개, 이메일, 주소를 변경 할 수있다")
     public ResponseEntity<ResponseForm> modifyUserProfile(
             @Valid @RequestBody UserModifyAllRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -101,6 +106,7 @@ public class UserController {
 
     @PatchMapping("/profile/password")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN')")
+    @Operation(summary = "비밀번호 수정", description = "비밀번호를 수정한다")
     public ResponseEntity<ResponseForm> modifyUserPassword(
             @Valid @RequestBody UserModifyPasswordRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -123,6 +129,7 @@ public class UserController {
 
     @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "회원정보 전체 검색", description = "회원 전체 검색 - 관리자 기능")
     public ResponseEntity<ResponseForm> findAllUser() {
 
         log.info("회원정보 전체 검색");
@@ -135,8 +142,9 @@ public class UserController {
                         .build());
     }
 
-    @DeleteMapping("admin/{userId}")
+    @DeleteMapping("/admin/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "회원정보 삭제(비활성화)", description = "회원 삭제(비활성화) - 관리자 기능")
     public ResponseEntity<ResponseForm> deActiveUser(
             @PathVariable Long userId){
 
