@@ -100,7 +100,7 @@ public class UserService {
 
         findUser.deActiveUser();
 
-        userRepository.save(findUser);
+
     }
 
     private User findUserByUsername(String username) {

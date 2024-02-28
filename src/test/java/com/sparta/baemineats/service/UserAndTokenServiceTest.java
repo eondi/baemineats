@@ -2,6 +2,8 @@ package com.sparta.baemineats.service;
 
 import com.sparta.baemineats.dto.requestDto.LoginRequestDto;
 import com.sparta.baemineats.dto.requestDto.SignupRequestDto;
+import com.sparta.baemineats.dto.requestDto.UserModifyAllRequestDto;
+import com.sparta.baemineats.dto.requestDto.UserModifyPasswordRequestDto;
 import com.sparta.baemineats.dto.responseDto.ResponseUserList;
 import com.sparta.baemineats.dto.responseDto.TokenDto;
 import com.sparta.baemineats.entity.Token;
@@ -29,7 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -149,6 +151,68 @@ class UserAndTokenServiceTest {
         verify(userRepository, times(1)).findAll();
 
     }
+
+    @Test
+    @DisplayName("정상적인 사용자 정보 전체 수정 테스트")
+    void test5(){
+        //given
+        User user = new User("user1", passwordEncoder.encode("aA111223344@"),"어쩌고동 어쩌고 호","asdfea@naver.com");
+        UserModifyAllRequestDto requestDto = new UserModifyAllRequestDto("안녕하십니까~!","alstkd452@naver.com","어쩌고동 저쩔티비동 어쩔티비호");
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+
+        //when
+        userService.updateAll(user,requestDto);
+
+        //then
+        assertEquals(requestDto.getDescription(),user.getDescription());
+        assertEquals(requestDto.getEmail(),user.getEmail());
+        assertEquals(requestDto.getAddress(),user.getAddress());
+
+
+    }
+
+    @Test
+    @DisplayName("정상적으로 유저가 비밀번호 변경")
+    void test6() {
+        // Given
+        User user = new User("user1", passwordEncoder.encode("aA111223344@"),"어쩌고동 어쩌고 호","asdfea@naver.com");
+        UserModifyPasswordRequestDto requestDto = new UserModifyPasswordRequestDto("aA111223344@", "aA1234567@");
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(requestDto.getNewPassword(), user.getPassword())).thenReturn(false);
+        when(passwordEncoder.encode(requestDto.getNewPassword())).thenReturn("encodedPassword");
+
+        // When
+        assertDoesNotThrow(() -> userService.updatePassword(user, requestDto));
+
+        // Then
+        assertEquals("encodedPassword", user.getPassword());
+    }
+
+    @Test
+    @DisplayName("관리자의 권한을 가진 사용자가 유저를 삭제(비활성화) 테스트")
+    void test7(){
+        //given
+        Long userId = 1L;
+        User user = new User(userId, "bob4", "aA123456@", "잘 부탁드립니다.", "어쩔아파트 저쩔동 어쩔호","aasdfdas@naver.com" ,UserRoleEnum.USER, true);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+
+        // When
+        assertDoesNotThrow(() -> userService.deActiveUser(userId));
+
+
+        //then
+        assertFalse(user.isActive());
+        verify(userRepository,times(1)).findById(any(Long.class));
+
+    }
+
+
+
+
 
 
 

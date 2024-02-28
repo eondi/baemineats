@@ -23,21 +23,16 @@ public class User extends TimeStamped{
     private Long userId;
 
     @Column(nullable = false, unique = true)
-
     private String username;
-
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-
     private String description = "잘부탁드립니다.";
-
 
     @Column(nullable = false)
     private String address;
-
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -65,7 +60,6 @@ public class User extends TimeStamped{
         this.email = email;
         this.role = UserRoleEnum.USER;
     }
-
 
     public void userProfileAllUpdate(UserModifyAllRequestDto requestDto) {
         this.email = requestDto.getEmail();

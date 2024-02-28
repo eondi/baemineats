@@ -3,11 +3,9 @@ package com.sparta.baemineats.repository;
 import com.sparta.baemineats.entity.Order;
 import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.entity.User;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 @Repository
