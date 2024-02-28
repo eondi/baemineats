@@ -23,13 +23,13 @@ public class Store extends TimeStamped{
     private String storeDescription;
 
     @Column(nullable = false)
-    private String sellrName;
+    private String sellerName;
 
 
     public Store(StoreRequest request, String username) {
         this.storeName = request.getStoreName();
         this.storeDescription = request.getStoreDescription();
-        this.sellrName = username;
+        this.sellerName = username;
     }
 
     public void update(StoreRequest request) {
