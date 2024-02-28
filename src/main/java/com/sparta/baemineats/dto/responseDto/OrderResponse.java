@@ -2,14 +2,16 @@ package com.sparta.baemineats.dto.responseDto;
 
 import com.sparta.baemineats.entity.Order;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class OrderResponse {
     private Long orderId;
     private Long storeId;
     private Long userId;
     private boolean orderComplete;
-    private String orderState;
+    private Order.OrderStateEnum orderState;
 
     public OrderResponse(Order order) {
         this.orderId = order.getOrderId();
