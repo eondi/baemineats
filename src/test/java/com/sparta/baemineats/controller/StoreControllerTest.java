@@ -132,8 +132,6 @@ class StoreControllerTest {
     StoreResponse TEST_STORE_RESONSE_DTO3 = new StoreResponse(TEST_STORE3);
 
 
-
-    List<Store> storeList = new ArrayList<>();
     List<StoreResponse> storeResponseList = new ArrayList<>();
 
 
@@ -156,6 +154,13 @@ class StoreControllerTest {
 
         // Mock 테스트 유저 생성
         UserDetailsImpl testUserDetails = new UserDetailsImpl(TEST_USER);
+        mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
+    }
+
+    private void mockAdminSetup() {
+
+        // Mock 테스트 관리자 생성
+        UserDetailsImpl testUserDetails = new UserDetailsImpl(TEST_ADMIN);
         mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
     }
 
@@ -183,8 +188,29 @@ class StoreControllerTest {
     }
 
     @Test
-    @DisplayName("음식점 생성 기능 권한 테스트 - 일반 유저 400에러")
+    @DisplayName("음식점 생성 기능 권한 테스트 - 관리자")
     void writeAuthTest() throws Exception {
+
+        // given
+        this.mockAdminSetup();
+        StoreRequest requestDto = new StoreRequest(STORE_NAME,STORE_DESCRIPTION);
+        String postInfo = objectMapper.writeValueAsString(requestDto);
+
+        // when - then
+        ResultActions resultActions  = mvc.perform(post("/api/stores")
+                .content(postInfo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .principal(mockPrincipal)
+        );
+
+
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("음식점 생성 기능 권한 테스트 - 일반 유저 400에러")
+    void writeAuthErrorTest() throws Exception {
 
         // given
         this.mockUserSetup();
@@ -276,6 +302,48 @@ class StoreControllerTest {
 
     }
 
+    @Test
+    @DisplayName("음식점 수정 권한 테스트 - 일반 유저  불가 ")
+    void updateAuthErrorTest() throws Exception {
+
+        // given
+        this.mockUserSetup();
+        String postInfo = objectMapper.writeValueAsString(TEST_STORE_REQUEST_DTO);
+
+        given(storeService.updateStore(1L,TEST_STORE_REQUEST_DTO,TEST_SELLER)).willReturn(TEST_STORE_RESONSE_DTO1);
+
+        // when - then
+        ResultActions resultActions  = mvc.perform(put("/api/stores/{storeId}",1)
+                .content(postInfo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(mockPrincipal)
+        );
+
+        resultActions.andExpect(content().json("{\"statusCode\":400,\"state\":\"BAD_REQUEST\",\"message\":\"Access is denied\"}"));
+
+    }
+
+    @Test
+    @DisplayName("음식점 수정 권한 테스트 - 관리자 불가 ")
+    void updateAuthError2Test() throws Exception {
+
+        // given
+        this.mockAdminSetup();
+        String postInfo = objectMapper.writeValueAsString(TEST_STORE_REQUEST_DTO);
+
+        given(storeService.updateStore(1L,TEST_STORE_REQUEST_DTO,TEST_SELLER)).willReturn(TEST_STORE_RESONSE_DTO1);
+
+        // when - then
+        ResultActions resultActions  = mvc.perform(put("/api/stores/{storeId}",1)
+                .content(postInfo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(mockPrincipal)
+        );
+
+        resultActions.andExpect(content().json("{\"statusCode\":400,\"state\":\"BAD_REQUEST\",\"message\":\"Access is denied\"}"));
+
+    }
+
 
     @Test
     @DisplayName("음식점 삭제 테스트")
@@ -295,6 +363,25 @@ class StoreControllerTest {
         resultActions.andExpect(status().isOk()).andReturn();
 
         resultActions.andExpect(content().json("{\"httpStatus\":200,\"message\":\"해당 음식점 삭제를 성공했습니다. 음식점 : 피자\",\"data\":null}"));
+
+    }
+
+    @Test
+    @DisplayName("음식점 삭제 테스트 - 일반 유저 불가 ")
+    void deleteAuthErrorTest() throws Exception {
+
+        // given
+        this.mockUserSetup();
+
+        given(storeService.deleteStore(1L,TEST_SELLER)).willReturn("피자");
+
+        // when - then
+        ResultActions resultActions  = mvc.perform(delete("/api/stores/{storeId}",1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(mockPrincipal)
+        );
+
+        resultActions.andExpect(content().json("{\"statusCode\":400,\"state\":\"BAD_REQUEST\",\"message\":\"Access is denied\"}"));
 
     }
 
