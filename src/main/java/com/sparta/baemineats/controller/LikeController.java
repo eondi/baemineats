@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class LikeController {
 
     @GetMapping("{storeId}")
     @Operation(summary = "음식점 좋아요", description = "특정 음식점에 좋아요를 할수있다 (찜)")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<ResponseForm> likeStore(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String response = likeService.likeStore(storeId, userDetails.getUser());
 
@@ -37,6 +39,7 @@ public class LikeController {
 
     @DeleteMapping("{storeId}")
     @Operation(summary = "음식점 좋아요취소", description = "좋아요를 취소 할 수 있다")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<ResponseForm> unlikeStore(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String response = likeService.unlikeStore(storeId, userDetails.getUser());
 
@@ -49,6 +52,7 @@ public class LikeController {
 
     @GetMapping("/store/{storeId}")
     @Operation(summary = "좋아요 유저 조회", description = "음식점에 좋아요를 누른 사용자를 조회할수있다")
+    @PreAuthorize("hasAnyRole('ROLE_SELLER')")
     public ResponseEntity<ResponseForm> getUserlike(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<LikeUserResponse> response = likeService.getUserlike(storeId, userDetails.getUser());
 
@@ -62,6 +66,7 @@ public class LikeController {
 
     @GetMapping("/user")
     @Operation(summary = "좋아요 가게 조회", description = "자신이 좋아요한 가게 정보 조회")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<ResponseForm> getStorelike( @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<LikeStoreResponse> response = likeService.getStorelike(userDetails.getUser());
 

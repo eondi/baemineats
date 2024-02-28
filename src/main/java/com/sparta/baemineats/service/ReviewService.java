@@ -25,10 +25,6 @@ public class ReviewService {
     private final MenuRepository menuRepository;
 
     public ReviewResponse createReview(ReviewRequest request, User user) {
-        // 권한 판단
-        if (!user.getRole().equals(UserRoleEnum.USER))
-            throw new IllegalArgumentException("일반 유저만 리뷰 가능합니다.");
-
         // 주문 조회
         Order order = orderRepository.findById(request.getOrderId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 id의 주문이 없습니다.")
@@ -56,9 +52,6 @@ public class ReviewService {
 
     @Transactional
     public ReviewResponse updateReview(Long reviewId, ReviewRequest request, User user) {
-        // 권한 판단
-        if (!user.getRole().equals(UserRoleEnum.USER) )
-            throw new IllegalArgumentException("일반 사용자 수정이 가능합니다.");
 
 
         // 해당 리뷰 조회
@@ -93,7 +86,7 @@ public class ReviewService {
         String menuName = review.getMenu().getMenuName();
 
         // 리뷰 유저 확인 - 일반유저
-        if (!review.getUser().getUsername().equals(user.getUsername()) && user.getRole().equals(UserRoleEnum.USER))
+        if (!review.getUser().getUsername().equals(user.getUsername()))
             throw new IllegalArgumentException("다른 사용자의 리뷰 삭제는 불가능합니다.");
 
         // 리뷰 수정

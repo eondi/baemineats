@@ -17,11 +17,11 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/menus")
+@RequestMapping("/api/menu")
 public class MenuController {
     private final MenuService menuService;
 
-    @PostMapping("/stores/{storeId}")
+    @PostMapping("/{storeId}")
     @PreAuthorize("hasRole('ROLE_SELLER')")
     @Operation(summary = "메뉴 등록", description = "메뉴를 등록한다")
     public ResponseEntity<ResponseForm> createMenu(@PathVariable Long storeId, @ModelAttribute MenuRequest requestDto) {

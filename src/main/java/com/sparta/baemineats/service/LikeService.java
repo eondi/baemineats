@@ -21,8 +21,6 @@ public class LikeService {
 
 
     public String likeStore(Long storeId, User user) {
-        // 권한 판단
-        checkRole(user);
 
         // 해당 매장 조회
         Store store = storeService.findStore(storeId);
@@ -43,7 +41,6 @@ public class LikeService {
     }
 
     public String unlikeStore(Long storeId, User user) {
-        checkRole(user);
         List<Like> likeList = likeRepository.findByUser_UserId(user.getUserId());
         for (Like like : likeList){
             if (like.getStore().getStoreId().equals(storeId)){
@@ -63,8 +60,6 @@ public class LikeService {
 
 
     public List<LikeUserResponse> getUserlike(Long storeId, User user) {
-        if (!user.getRole().equals(UserRoleEnum.SELLER) )
-            throw new IllegalArgumentException("판매자만 조회가 가능합니다");
 
         List<Like> likeList = likeRepository.findALLByStore_StoreId(storeId);
         List<LikeUserResponse> likeUserResponseList = new ArrayList<>();
@@ -76,7 +71,6 @@ public class LikeService {
     }
 
     public List<LikeStoreResponse> getStorelike(User user) {
-        checkRole(user);
 
         List<Like> likeList = likeRepository.findALLByUser_UserId(user.getUserId());
         List<LikeStoreResponse> likeUserResponseList = new ArrayList<>();
