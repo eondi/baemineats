@@ -55,7 +55,7 @@ public class User extends TimeStamped{
         this.password = encodedPassword;
         this.address = requestDto.getAddress();
         this.email = requestDto.getEmail();
-        this.role = requestDto.getUserRoleEnum();
+        this.role = requestDto.getRole();
     }
 
     public User(String username, String password, String address, String email) {

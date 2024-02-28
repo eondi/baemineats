@@ -23,5 +23,5 @@ public class SignupRequestDto {
     @NotBlank(message = "주소를 필수로 입력 해주세요.")
     private String address;
 
-    private UserRoleEnum userRoleEnum;
+    private UserRoleEnum role;
 }
