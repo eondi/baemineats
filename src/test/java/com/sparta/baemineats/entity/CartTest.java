@@ -1,5 +1,6 @@
 package com.sparta.baemineats.entity;
 
+import com.sparta.baemineats.dto.requestDto.CartRequest;
 import com.sparta.baemineats.dto.requestDto.MenuRequest;
 import com.sparta.baemineats.dto.requestDto.StoreRequest;
 import com.sparta.baemineats.repository.StoreRepository;
@@ -16,41 +17,41 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
-class MenuTest {
+public class CartTest {
     @Mock
     StoreRepository storeRepository;
-
     @Test
-    @DisplayName("메뉴 생성")
-    public void test()throws IOException {
+    @DisplayName("장바구니 생성")
+    public void test() throws IOException {
         //given
         String menuName = "탕수육";
-        int menuPrice = 25000;
+        int menuPrice = 20000;
         String menuDescription = "돼지고기 : 국내산";
         String imageUrl = "http://localhost:8080/uploads/b.png";
 
         MockMultipartFile image = new MockMultipartFile(
-                "test",
-                "a.png",
+                "test2",
+                "b.png",
                 "image/png",
-                new FileInputStream(new File("C:/Users/Owner/Pictures/Screenshots/a.png")));
+                new FileInputStream(new File("C:/Users/Owner/Pictures/Screenshots/b.png")));
 
-        MenuRequest request = new MenuRequest(menuName,menuPrice,menuDescription,image);
+        MenuRequest requestDto = new MenuRequest(menuName, menuPrice, menuDescription, image);
 
         String storeName = "홍콩반점";
         String storeDescription = "맛있는 가게";
-        StoreRequest storeRequest = new StoreRequest(storeName,storeDescription);
-        Store store = storeRepository.save(new Store(storeRequest, "사장"));
+        StoreRequest request = new StoreRequest(storeName,storeDescription);
+        Store store = storeRepository.save(new Store(request, "사장"));
 
+        Menu menu = new Menu(requestDto, store, imageUrl);
+        User user = new User("이름","패스워드","주소","이메일");
+        CartRequest cartRequest = new CartRequest(1L,1L,1L,1L,15000);
         //when
-        Menu menu = new Menu(request, store, imageUrl);
+        Cart cart = new Cart(cartRequest, user, store, menu);
 
         //then
-        assertNull(menu.getMenuId());
-        assertEquals("탕수육",menu.getMenuName());
-        assertEquals("돼지고기 : 국내산",menu.getMenuDescription());
-
+        assertNull(cart.getCartId());
+        assertEquals(1L,cart.getQuantity());
+        assertEquals(15000,cart.getTotalPrice());
     }
 }

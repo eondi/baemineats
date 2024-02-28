@@ -13,7 +13,6 @@ import com.sparta.baemineats.repository.MenuRepository;
 import com.sparta.baemineats.repository.StoreRepository;
 import com.sparta.baemineats.security.UserDetailsImpl;
 import com.sparta.baemineats.service.CartService;
-import com.sparta.baemineats.service.MenuService;
 import com.sparta.baemineats.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +34,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.security.Principal;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
