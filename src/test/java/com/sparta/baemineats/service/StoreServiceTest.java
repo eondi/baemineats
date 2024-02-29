@@ -6,7 +6,6 @@ import com.sparta.baemineats.entity.Store;
 import com.sparta.baemineats.entity.User;
 import com.sparta.baemineats.entity.UserRoleEnum;
 import com.sparta.baemineats.repository.StoreRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
