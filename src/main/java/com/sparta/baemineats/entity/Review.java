@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "reviews")
 public class Review extends TimeStamped{
+//..
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
