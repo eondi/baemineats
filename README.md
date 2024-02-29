@@ -13,7 +13,6 @@ https://www.youtube.com/watch?v=yqhymD7vFIY&t=325s
 ![image](https://github.com/eondi/baemineats/assets/53809248/e6889651-401f-4687-8f86-a41a30db81bd)
 
 ✅ [API명세서]
-![image](https://github.com/eondi/baemineats/assets/53809248/81ff5beb-defe-4d9a-b35f-1362b9ae9a08)
 ![image](https://github.com/eondi/baemineats/assets/53809248/a5ab0157-54be-4cc1-8f96-08870b51792d)
 ![image](https://github.com/eondi/baemineats/assets/53809248/be4b1251-e816-4841-9b44-e31e5f2b6dfa)
 
