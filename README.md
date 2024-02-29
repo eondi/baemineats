@@ -5,10 +5,19 @@
     가게 메뉴 판매자는 가게를 등록하고 메뉴를 등록하여 메뉴를 등록 및 수정 삭제가 가능하다.
     관리자는 가게 관리 회원관리 등을 할 수 있다.
 
+✅ [ERD]
+
 ![image](https://github.com/eondi/baemineats/assets/53809248/e6889651-401f-4687-8f86-a41a30db81bd)
 
+✅ [와이어프레임]
+![image](https://github.com/eondi/baemineats/assets/53809248/97a99c9c-98d6-4819-a491-0851ebbf624f)
 
-[역할 별 기능]
+
+✅ Use Case Diagram
+![image](https://github.com/eondi/baemineats/assets/53809248/642c6ff0-10af-4ba7-8023-5bd7d6c3a5be)
+
+
+✅ [역할 별 기능]
 
 채은지 - 좋아요, 음식점, 리뷰
   1. 좋아요 : 가게별, 유저별 조회 / 좋아요 추가,취소 / 좋아요 수 집계
