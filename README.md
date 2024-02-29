@@ -1,5 +1,5 @@
 ## 프로젝트 소개
-** `배민 eats` **
+**`🍔배민 eats 🍕`**
 - 소개
     - 한 줄 정리 :  주문 서비스 사이트
     - 내용 : 주문 사용자는 가게 메뉴를 보고 주문을 할 수 있고
@@ -42,5 +42,5 @@ https://www.youtube.com/watch?v=yqhymD7vFIY&t=325s
     <tr>
       <td align="center"><a href="https://github.com/eondi"><img src="https://avatars.githubusercontent.com/u/87860163?v=4"width=100px;" alt=""/><br /><sub><b>팀장 : 채은지 </b></sub></a><br /></td>
       <td align="center"><a href="https://github.com/pastjung"><img src="https://avatars.githubusercontent.com/u/95015832?v=4" width="100px;" alt=""/><br /><sub><b>팀원 : 박수민 </b></sub></a><br /></td>
-      <td align="center"><a href="https://github.com/beunchoi"><img src="https://avatars.githubusercontent.com/u/54929479?v=4" width="100px;" alt=""/><br /><sub><b> 팀원 : 최병은 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/beunchoi"><img src="https://avatars.githubusercontent.com/u/87860163?v=4" width="100px;" alt=""/><br /><sub><b> 팀원 : 최병은 </b></sub></a><br /></td>
             <td align="center"><a href="https://github.com/KIM-TABLE-NEXT"><img src="https://avatars.githubusercontent.com/u/87860163?v=4" width="100px;" alt=""/><br /><sub><b> 팀원 : 김민상 </b></sub></a><br /></td>
