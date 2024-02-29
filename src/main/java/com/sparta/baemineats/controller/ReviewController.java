@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class ReviewController {
 
     @PostMapping
     @Operation(summary = "리뷰 등록", description = "리뷰를 등록한다")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<ResponseForm> createReview(@RequestBody ReviewRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
          ReviewResponse response = reviewService.createReview(request, userDetails.getUser());
 
@@ -52,6 +54,7 @@ public class ReviewController {
     }
     @PutMapping("{reviewId}")
     @Operation(summary = "음식점 수정", description = "특정 음식점을 수정 한다")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<ResponseForm> updateStore(@PathVariable Long reviewId, @RequestBody ReviewRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ReviewResponse response = reviewService.updateReview(reviewId, request,userDetails.getUser());
 
@@ -65,6 +68,7 @@ public class ReviewController {
 
     @DeleteMapping("{reviewId}")
     @Operation(summary = "리뷰 삭제", description = "특정 리뷰를 삭제 한다")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<ResponseForm> deleteStore(@PathVariable Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String response = reviewService.deleteStore(reviewId, userDetails.getUser());
 

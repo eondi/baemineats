@@ -13,7 +13,7 @@ public class UserModifyAllRequestDto {
     @NotNull(message = "한 줄 소개를 필수로 입력해주세요.")
     private String description;
 
-    @Email(message = "옳바른 email 형식이 아닙니다.")
+    @Email(message = "올바른 email 형식이 아닙니다.")
     private String email;
 
     @NotNull(message = "주소를 필수로 입력해주세요.")

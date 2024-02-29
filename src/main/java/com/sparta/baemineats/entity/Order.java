@@ -42,7 +42,7 @@ public class Order extends TimeStamped{
     private LocalDateTime confirmTime;
 
     @Column(nullable = false)
-    private String orderState;
+    private OrderStateEnum orderState;
 
 
     public Order(User user, Store store, Menu menu) {
@@ -52,10 +52,18 @@ public class Order extends TimeStamped{
         this.orderComplete = false;
         this.createTime = LocalDateTime.now();
         // todo : 후에 기능추가
-        this.orderState = "";
+        this.orderState = OrderStateEnum.ORDERED; // 초기 상태 설정
     }
 
     public void updateOrderState(OrderUpdate orderUpdate){
         this.orderState = orderUpdate.getOrderState();
+    }
+
+    public enum OrderStateEnum {
+        ORDERED,     // 주문 완료
+        PREPARING,   // 준비 중
+        DELIVERING,  // 배송 중
+        DELIVERED,   // 배송 완료
+        CANCELED     // 주문 취소
     }
 }
