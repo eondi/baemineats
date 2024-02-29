@@ -81,7 +81,7 @@ public class UserService {
 
         User findUser= findUserByUsername(user.getUsername());
 
-        if(passwordEncoder.matches(requestDto.getNewPassword(), findUser.getPassword())){
+        if(!passwordEncoder.matches(requestDto.getPassword(),findUser.getPassword())){
             throw new AccessDeniedException("비밀번호가 일치하지 않습니다.");
         }
 
