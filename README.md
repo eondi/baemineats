@@ -5,12 +5,17 @@
     가게 메뉴 판매자는 가게를 등록하고 메뉴를 등록하여 메뉴를 등록 및 수정 삭제가 가능하다.
     관리자는 가게 관리 회원관리 등을 할 수 있다.
 
+✅ [시연영상]
+https://www.youtube.com/watch?v=yqhymD7vFIY&t=325s
+
 ✅ [ERD]
 
 ![image](https://github.com/eondi/baemineats/assets/53809248/e6889651-401f-4687-8f86-a41a30db81bd)
 
-✅ [와이어프레임]
-![image](https://github.com/eondi/baemineats/assets/53809248/97a99c9c-98d6-4819-a491-0851ebbf624f)
+✅ [API명세서]
+![image](https://github.com/eondi/baemineats/assets/53809248/81ff5beb-defe-4d9a-b35f-1362b9ae9a08)
+![image](https://github.com/eondi/baemineats/assets/53809248/a5ab0157-54be-4cc1-8f96-08870b51792d)
+![image](https://github.com/eondi/baemineats/assets/53809248/be4b1251-e816-4841-9b44-e31e5f2b6dfa)
 
 
 ✅ Use Case Diagram
