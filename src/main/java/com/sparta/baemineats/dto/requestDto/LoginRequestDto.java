@@ -10,8 +10,4 @@ public class LoginRequestDto {
 
     private String password;
 
-    public LoginRequestDto(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 }
